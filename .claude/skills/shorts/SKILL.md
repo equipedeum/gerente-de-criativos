@@ -1,6 +1,6 @@
 ---
 name: shorts
-description: "Shorts": o usuário joga um vídeo vertical (Reel, story, gravação do celular) e recebe título de YouTube Shorts, descrição curta estilo rede social e tags baseadas em buscas reais (autocompletar do YouTube); corta o vídeo só se precisar. Usar quando ele mandar um .mp4 vertical solto pedindo título/descrição/tags, ou chamar de "Shorts".
+description: "\"Shorts\": o usuário joga um vídeo vertical (Reel, story, gravação do celular) e recebe título de YouTube Shorts, descrição curta estilo rede social e tags baseadas em buscas reais (autocompletar do YouTube); corta o vídeo só se precisar. Usar quando ele mandar um .mp4 vertical solto pedindo título/descrição/tags, ou chamar de \"Shorts\"."
 ---
 
 # Shorts

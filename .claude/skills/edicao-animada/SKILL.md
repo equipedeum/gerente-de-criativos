@@ -1,6 +1,6 @@
 ---
 name: edicao-animada
-description: Edição animada (menu 9) — o vídeo vira um documentário ilustrado em vetor chapado: animação em TELA CHEIA o vídeo inteiro com a voz da pessoa narrando, cenários em camadas com paralaxe e muita ação (pássaros, carros, janelas, relógio, gente de corpo inteiro trabalhando), número falado em serifa grande, rótulo com relógio de bolso; a pessoa entra em tela cheia numa frase a cada ~10–15 s, com legenda simples. Sons do Earshot. Usar quando o usuário escolher "Edição animada" no menu, pedir "vídeo animado/ilustrado", ou quando o gerente delegar.
+description: "Edição animada (menu 9) — o vídeo vira um documentário ilustrado em vetor chapado: animação em TELA CHEIA o vídeo inteiro com a voz da pessoa narrando, cenários em camadas com paralaxe e muita ação (pássaros, carros, janelas, relógio, gente de corpo inteiro trabalhando), número falado em serifa grande, rótulo com relógio de bolso; a pessoa entra em tela cheia numa frase a cada ~10–15 s, com legenda simples. Sons do Earshot. Usar quando o usuário escolher \"Edição animada\" no menu, pedir \"vídeo animado/ilustrado\", ou quando o gerente delegar."
 ---
 
 # Edição animada

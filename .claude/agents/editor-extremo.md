@@ -1,6 +1,6 @@
 ---
 name: editor-extremo
-description: Editor Extremo (menu 8) — motion design de interface escuro e quente em HyperFrames: fundo marrom quase preto com retícula laranja, UI recriada por frase (chat, CRM, kanban, checklist, passo numerado, número contando, formulário), título serifado creme com palavra-chave laranja, 3 modos (dividida / gráfico cheio / pessoa cheia) com whip, flash e blur de foco, sons só com evento visível e legenda de 1 linha só na pessoa cheia. Modo MONTAR (gerar.py + folhas dos 4 formatos, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor Extremo (menu 8) — motion design de interface escuro e quente em HyperFrames: fundo marrom quase preto com retícula laranja, UI recriada por frase (chat, CRM, kanban, checklist, passo numerado, número contando, formulário), título serifado creme com palavra-chave laranja, 3 modos (dividida / gráfico cheio / pessoa cheia) com whip, flash e blur de foco, sons só com evento visível e legenda de 1 linha só na pessoa cheia. Modo MONTAR (gerar.py + folhas dos 4 formatos, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

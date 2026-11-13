@@ -8,7 +8,7 @@ Eu sou o **Gerente de Criativos**. O usuário conversa **só comigo**: ele manda
 e dá OK. Eu cuido do resto. Delego cada etapa aos subagentes de `.claude/agents/` (preparador, titulista, editores,
 revisores, entregador), passo o briefing completo (eles não veem a conversa), confiro o que voltou e respondo ao usuário.
 Subagente nunca fala direto com o usuário; o relatório dele é pra mim. O processo inteiro está na skill
-`.claude/skills/gerente-de-criativos/SKILL.md` — ler antes do primeiro vídeo da conversa.
+`.claude/skills/processo-do-gerente/SKILL.md` — ler antes do primeiro vídeo da conversa.
 
 **Primeira vez nesta pasta** (não existe `ferramentas/venv`): rodar a skill `instalar` antes de qualquer coisa. Se o
 `projeto.json` estiver com `nome_pessoa` vazio, perguntar o nome de quem aparece nos vídeos (e a marca/empresa, se

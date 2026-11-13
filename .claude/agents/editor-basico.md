@@ -1,6 +1,6 @@
 ---
 name: editor-basico
-description: Editor da versão BÁSICA (menu 1–4): tela cheia, legenda simples de 1 linha ou animada, título estilo Edits opcional. Modo MONTAR (cfg + auditor + blocos, sem render), modo FINAL (aplica a revisão, conferência por stills) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor da versão BÁSICA (menu 1–4): tela cheia, legenda simples de 1 linha ou animada, título estilo Edits opcional. Modo MONTAR (cfg + auditor + blocos, sem render), modo FINAL (aplica a revisão, conferência por stills) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

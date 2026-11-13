@@ -1,6 +1,6 @@
 ---
 name: editor-hyperframe
-description: Editor Hyperframe (menu 5) — tela dividida em HyperFrames: pessoa embaixo, painel de lettering + ícones Phosphor em cima, sem legenda e sem título, 3 modos alternando. Modo MONTAR (gerar.py + folhas de revisão, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor Hyperframe (menu 5) — tela dividida em HyperFrames: pessoa embaixo, painel de lettering + ícones Phosphor em cima, sem legenda e sem título, 3 modos alternando. Modo MONTAR (gerar.py + folhas de revisão, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

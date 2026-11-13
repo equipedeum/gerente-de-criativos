@@ -1,6 +1,6 @@
 ---
 name: animacao-viral
-description: Animação viral (menu 10) — o vídeo vira um desenho 3D estilo short viral (personagens 2D "cabeça de feijão" com contorno a tinta num mundo 3D pintado, câmera em travelling, desfoque de lente), em Remotion + three.js. Alterna 3 modos com corte a cada 3–5 s em fim de frase: pessoa em tela cheia (único com legenda simples de 1 linha), tela dividida (animação em cima, pessoa embaixo) e animação em tela cheia; CTA na pessoa. Usar quando o usuário escolher "Animação viral" no menu, pedir "animação 3D", "bonequinho 3D", ou quando o gerente delegar.
+description: "Animação viral (menu 10) — o vídeo vira um desenho 3D estilo short viral (personagens 2D \"cabeça de feijão\" com contorno a tinta num mundo 3D pintado, câmera em travelling, desfoque de lente), em Remotion + three.js. Alterna 3 modos com corte a cada 3–5 s em fim de frase: pessoa em tela cheia (único com legenda simples de 1 linha), tela dividida (animação em cima, pessoa embaixo) e animação em tela cheia; CTA na pessoa. Usar quando o usuário escolher \"Animação viral\" no menu, pedir \"animação 3D\", \"bonequinho 3D\", ou quando o gerente delegar."
 ---
 
 # Animação viral

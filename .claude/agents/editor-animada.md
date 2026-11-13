@@ -1,6 +1,6 @@
 ---
 name: editor-animada
-description: Editor "Edição animada" (menu 9) — documentário ilustrado em vetor chapado: animação em TELA CHEIA o vídeo todo com a voz da pessoa narrando, cenários em camadas com paralaxe e muita ação, e a pessoa em tela cheia numa frase a cada ~10–15 s. Sons do Earshot. Modo MONTAR (gerar.py + folha, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor \"Edição animada\" (menu 9) — documentário ilustrado em vetor chapado: animação em TELA CHEIA o vídeo todo com a voz da pessoa narrando, cenários em camadas com paralaxe e muita ação, e a pessoa em tela cheia numa frase a cada ~10–15 s. Sons do Earshot. Modo MONTAR (gerar.py + folha, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: editor-paper
-description: Editor Paper (menu 6) — estilo papel em Remotion: papel creme em cima com recortes animados, pessoa embaixo, legenda karaokê verde na borda rasgada, 3 modos. Modo MONTAR (blocos + cenas + sons + fotos, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor Paper (menu 6) — estilo papel em Remotion: papel creme em cima com recortes animados, pessoa embaixo, legenda karaokê verde na borda rasgada, 3 modos. Modo MONTAR (blocos + cenas + sons + fotos, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

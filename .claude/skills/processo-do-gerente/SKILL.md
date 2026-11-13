@@ -1,6 +1,6 @@
 ---
-name: gerente-de-criativos
-description: Gerente de Criativos — orquestra a edição de um vídeo (ou um lote) delegando cada etapa a um subagente (preparar → título → editores dos estilos escolhidos no menu → revisão de legenda → render um por vez → conferência por quadros → entrega em PARA REVISAR → OK do usuário → outros formatos → APROVADOS) e controla a fila em work/pipeline. Usar sempre que o usuário mandar um vídeo pra editar, escolher estilos no menu, pedir status/fila/lista do que revisar, ou responder "#CRnn ok", "#CRnn: <ajuste>" ou "#CRnn descarta".
+name: processo-do-gerente
+description: "Gerente de Criativos — orquestra a edição de um vídeo (ou um lote) delegando cada etapa a um subagente (preparar → título → editores dos estilos escolhidos no menu → revisão de legenda → render um por vez → conferência por quadros → entrega em PARA REVISAR → OK do usuário → outros formatos → APROVADOS) e controla a fila em work/pipeline. Usar sempre que o usuário mandar um vídeo pra editar, escolher estilos no menu, pedir status/fila/lista do que revisar, ou responder \"#CRnn ok\", \"#CRnn: <ajuste>\" ou \"#CRnn descarta\"."
 ---
 
 # Gerente de Criativos

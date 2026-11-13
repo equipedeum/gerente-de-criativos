@@ -1,6 +1,6 @@
 ---
 name: editor-animacao-viral
-description: Editor "Animação viral" (menu 10) — desenho 3D de short viral (personagens 2D "cabeça de feijão" com contorno a tinta num mundo 3D pintado, câmera em travelling, desfoque de lente), em Remotion + three.js. Alterna 3 modos com corte a cada 3–5 s em fim de frase: T (pessoa em tela cheia, único com legenda), D (tela dividida) e A (animação em tela cheia); CTA em T; sem mexer na cor da pessoa. Modo MONTAR (roteiro + cena + folha, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos.
+description: "Editor \"Animação viral\" (menu 10) — desenho 3D de short viral (personagens 2D \"cabeça de feijão\" com contorno a tinta num mundo 3D pintado, câmera em travelling, desfoque de lente), em Remotion + three.js. Alterna 3 modos com corte a cada 3–5 s em fim de frase: T (pessoa em tela cheia, único com legenda), D (tela dividida) e A (animação em tela cheia); CTA em T; sem mexer na cor da pessoa. Modo MONTAR (roteiro + cena + folha, sem render) e modo CORRIGIR. Usar pelo gerente-de-criativos."
 model: opus
 ---
 

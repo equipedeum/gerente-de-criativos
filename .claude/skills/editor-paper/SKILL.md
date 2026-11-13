@@ -1,6 +1,6 @@
 ---
 name: editor-paper
-description: Editor Paper (menu 6) — estilo papel em Remotion: tela dividida com papel creme amassado em cima (recortes chapados que se acumulam por seção, cupom impresso, carimbos, destaque verde, dinheiro verde, sirene/coração/fogo vermelhos, sem etiqueta de seção) e a pessoa embaixo, com legenda karaokê (palavra falada em verde) numa faixa de papel sobre a borda rasgada; alterna os 3 modos. Usar quando o usuário escolher "Paper" no menu, pedir "estilo papel", "metade de cima animada com recortes", ou quando o gerente delegar a versão Paper de um vídeo.
+description: "Editor Paper (menu 6) — estilo papel em Remotion: tela dividida com papel creme amassado em cima (recortes chapados que se acumulam por seção, cupom impresso, carimbos, destaque verde, dinheiro verde, sirene/coração/fogo vermelhos, sem etiqueta de seção) e a pessoa embaixo, com legenda karaokê (palavra falada em verde) numa faixa de papel sobre a borda rasgada; alterna os 3 modos. Usar quando o usuário escolher \"Paper\" no menu, pedir \"estilo papel\", \"metade de cima animada com recortes\", ou quando o gerente delegar a versão Paper de um vídeo."
 ---
 
 # Editor Paper — estilo papel em Remotion

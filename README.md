@@ -6,9 +6,19 @@ preparador, titulista, um editor por estilo, revisores de legenda e de imagem e 
 
 ## Instalar (Mac ou Windows)
 
-1. Instale o Claude Code (app ou terminal).
-2. Crie uma pasta vazia **sem espaço no nome** (ex.: `~/Documents/gerente-de-criativos`) e abra o Claude Code nela.
-3. Cole o link deste repositório e peça: **"clona esse repositório aqui e instala"**.
+Antes: ter o Claude Code (app ou terminal), o Node.js (pra rodar o `npx`) e o convite deste repositório aceito
+no GitHub (ele é privado), com o GitHub logado no computador.
+
+1. No Terminal, instale a skill:
+   ```bash
+   npx skills add rafaelextremo/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
+   ```
+2. Abra o Claude Code e peça: **"instala o gerente de criativos"**.
+3. No fim, abra uma conversa nova do Claude Code na pasta `gerente-de-criativos` (na sua pasta pessoal) e fale com o
+   Gerente.
+
+Sem o `npx`: abra o Claude Code em qualquer pasta, cole o link deste repositório e peça **"clona esse repositório em
+~/gerente-de-criativos e instala"**.
 
 O Claude baixa o projeto, confere o que falta no computador e pede o seu OK antes de instalar cada programa (Homebrew,
 Python 3.12, ffmpeg, Node.js) e antes dos downloads grandes (modelo de transcrição ~480 MB, pacotes ~300 MB). No fim
@@ -44,6 +54,7 @@ Responda com os números. Cada versão ganha um código (`#CR01`, `#CR02`…) e 
 |---|---|
 | `CLAUDE.md` | quem é o Gerente e as regras de edição |
 | `.claude/agents/` | os subagentes |
+| `skills/gerente-de-criativos/` | a skill instaladora (a que o `npx skills add` instala) |
 | `.claude/skills/` | o processo de cada estilo, a instalação e as skills do HyperFrames |
 | `work/` | preparo, versão básica e fila (`work/pipeline/`) |
 | `hyperframes/` | motores dos estilos em HyperFrames (Hyperframe, VOX, Extremo, Edição animada) e moldes em `exemplos/` |

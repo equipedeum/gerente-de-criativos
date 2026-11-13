@@ -1,6 +1,6 @@
 ---
 name: video-dividido-hyperframes
-description: Hyperframe (menu 5) — editar um vídeo em HyperFrames no formato "tela dividida": pessoa embaixo, painel preto em cima com tudo o que ela fala virando lettering palavra por palavra (Inter Bold / Montserrat Light) + ícones Phosphor e widgets, sem legenda e sem título (só se pedirem), alternando os 3 modos; depois YT 1920x1080, IN 1080x1350 e GL 1080x1080. Também guarda os scripts comuns a todos os estilos HyperFrames (preparar, revisar, renderizar, exportar). Usar quando o usuário escolher "Hyperframe" no menu, pedir "tela dividida com animações em cima", ou quando o gerente delegar a versão Hyperframe de um vídeo.
+description: "Hyperframe (menu 5) — editar um vídeo em HyperFrames no formato \"tela dividida\": pessoa embaixo, painel preto em cima com tudo o que ela fala virando lettering palavra por palavra (Inter Bold / Montserrat Light) + ícones Phosphor e widgets, sem legenda e sem título (só se pedirem), alternando os 3 modos; depois YT 1920x1080, IN 1080x1350 e GL 1080x1080. Também guarda os scripts comuns a todos os estilos HyperFrames (preparar, revisar, renderizar, exportar). Usar quando o usuário escolher \"Hyperframe\" no menu, pedir \"tela dividida com animações em cima\", ou quando o gerente delegar a versão Hyperframe de um vídeo."
 ---
 
 # Hyperframe — tela dividida em HyperFrames
