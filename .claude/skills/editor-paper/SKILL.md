@@ -7,7 +7,7 @@ description: Editor Paper (menu 6) — estilo papel em Remotion: tela dividida c
 
 Metade de baixo: a pessoa (recorte do vídeo dela). Metade de cima: papel creme amassado onde recortes de papel entram no
 tempo da fala, uma metáfora literal por frase, acumulando dentro de cada seção. Legenda karaokê (palavra falada em verde)
-numa faixa de papel inclinada sobre a borda rasgada. Molde: `remotion/src/paper/videos/exemplo.tsx` (+ `exemplo-blocos.txt`).
+numa faixa de papel inclinada sobre a borda rasgada. Molde: `remotion/src/paper/videos/demo.tsx` (+ `demo-blocos.txt`).
 
 ## Onde está o quê
 
@@ -34,7 +34,7 @@ numa faixa de papel inclinada sobre a borda rasgada. Molde: `remotion/src/paper/
 4. **Roteiro visual**: seções de 5–15 s. Dentro da seção, um elemento novo por frase (metáfora literal da fala),
    entrando ~0,1 s antes da palavra; os elementos se acumulam. Números: etiqueta que **bate como carimbo**; listas e
    contas: **cupom saindo da impressora**; virada: carimbo grande. Nunca inventar número, logo ou tela.
-5. **`remotion/src/paper/videos/<id>.tsx`** a partir do `exemplo.tsx`; registrar em `videos/index.ts`. Seção troca 0,2 s
+5. **`remotion/src/paper/videos/<id>.tsx`** a partir do `demo.tsx`; registrar em `videos/index.ts`. Seção troca 0,2 s
    antes da 1ª palavra da frase que a abre. **Punch-in**: 3–4 frases de impacto, zoom ~1,08–1,2 até a frase seguinte,
    nunca duas seguidas, sempre em fronteira de frase.
 6. **3 modos** (regra: a imagem nunca fica > 4 s parada): no RL, de tempos em tempos uma frase inteira com a pessoa em
