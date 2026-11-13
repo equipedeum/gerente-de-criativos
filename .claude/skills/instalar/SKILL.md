@@ -35,7 +35,7 @@ python3.12 -m venv ferramentas/venv                # Windows: py -3.12 -m venv f
 ./py -m pip install -r requirements.txt
 ./py -c "from faster_whisper import WhisperModel; WhisperModel('small', device='cpu', compute_type='int8', download_root='models')"
 cd remotion && npm ci && cd ..
-npx -y hyperframes@0.8.76 doctor                   # baixa o HyperFrames; mostra o que falta (Chrome, ffmpeg)
+npx -y hyperframes@0.8.76 doctor                   # baixa o HyperFrames; mostra o que falta (Chrome, ffmpeg). Docker NÃO é necessário (ignorar o ✗ dele)
 ```
 - `./py` acha o Python do venv no Mac (`ferramentas/venv/bin/python`) e no Windows (`ferramentas/venv/Scripts/python.exe`)
   e cria `ferramentas/ffmpeg_path.txt` com o ffmpeg do PATH na primeira vez.

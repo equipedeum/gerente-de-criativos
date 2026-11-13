@@ -1,6 +1,6 @@
 """Kit de efeitos sonoros do Paper feito com o Earshot (MIT) -> remotion/public/sfx-earshot/*.wav (desde 08/11/2026).
 
-    ferramentas/earshot-venv/Scripts/python.exe remotion/scripts/sfx_earshot.py
+    ferramentas/earshot-venv/bin/python remotion/scripts/sfx_earshot.py   (Windows: .../Scripts/python.exe; Earshot é opcional — o kit já vem pronto)
 
 Pedido do usuário (08/11/2026): "se temos ele OK, use essa skill também com o paper". Mesmos nomes do kit antigo
 (public/sfx/, scripts/sfx.py — fica como reserva), então o sfx_auto.py e o GANHO do PaperVideo não mudam.

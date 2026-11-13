@@ -44,7 +44,7 @@ c = cena(28, 31, 'O resultado assustou')
 monta(c, '{64f}O resultado|{120}me *assustou', linha(c, [ic('warning', 200, 'verde', t=31, anim='pop')]))
 
 c = cena(32, 44, '70% em tarefas dos outros')
-monta(c, '{64f}do meu tempo ia para tarefas|{120}*70%|{60f}que outra pessoa podia fazer',
+monta(c, '{120}*70%|{64f}do meu tempo ia para tarefas|{60f}que outra pessoa podia fazer',
       comparacao(c, 32, antes='Meu tempo', depois='Delegável', de=100, ate=70, t_muda=40), gap=30)
 
 c = cena(45, 50, 'Mensagem, orçamento, pagamento')
@@ -58,7 +58,7 @@ c = cena(65, 73, 'Oito horas, o dobro')
 monta(c, '{64f}Hoje eu trabalho 8 horas|{110}e entrego o *dobro', barras(c, 70, 'Entrega', t_seta=73), gap=30)
 
 c = cena(74, 86, 'Tempo pra crescer')
-monta(c, '{64f}sobra tempo para pensar no que faz|{104}a empresa *crescer', grafico_linha(c, 84, 'rocket-launch'), gap=30)
+monta(c, '{64f}sobra tempo para pensar|{104}a empresa *crescer', grafico_linha(c, 84, 'rocket-launch'), gap=30)
 
 c = cena(87, 98, 'O modelo da lista')
 monta(c, '{64f}o modelo que eu uso para fazer|{110}essa *lista', linha(c, [ic('list-checks', 210, t=97, anim='pop')]))

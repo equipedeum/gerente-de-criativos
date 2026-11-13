@@ -60,7 +60,7 @@ monta(c, '{64f}Hoje eu trabalho 8 horas|{110}e entrego o *dobro',
       linha(c, [ic('clock', 170, t=68), ic('chart-line-up', 200, 'verde', t=73, anim='pop')]))
 
 c = vox.escura(cena(74, 86, 'Tempo pra crescer'))
-monta(c, '{64f}sobra tempo para pensar no que faz|{104}a empresa *crescer',
+monta(c, '{64f}sobra tempo para pensar|{104}a empresa *crescer',
       grafico_linha(c, 84, 'rocket-launch'), gap=30)
 
 # ================================================================ CTA (sem "link" escrito na tela)
