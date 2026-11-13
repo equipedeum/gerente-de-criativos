@@ -1,0 +1,8 @@
+# tudo em LF (os scripts bash e o ./py quebram com CRLF)
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.wav binary
+*.ttf binary
+*.woff2 binary
+*.mp4 binary
