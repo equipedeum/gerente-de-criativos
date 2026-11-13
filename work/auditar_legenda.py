@@ -14,5 +14,4 @@ for caminho in sys.argv[1:]:
         if len(ws) > 4: mot.append(f"{len(ws)} palavras")
         if sa(re.sub(r"\W", "", ws[-1])) in FRACAS and not re.search(r"[.,?!:;…]$", ws[-1]): mot.append(f"termina em '{ws[-1]}'")
         if re.search(r"[.?!…] +[A-ZÁÉÍÓÚÂÊÔÃÕÇ]", b): mot.append("frase nova no meio")
-        if re.search(r"(?i)thiago", b): mot.append("pessoa -> pessoa")
         if mot: print(f"{caminho.split('/')[-1]}  [{'; '.join(mot)}]  {b}")
