@@ -53,6 +53,9 @@ Aplicar exatamente o ajuste, stills do trecho, render de versão nova.
   cabe fica de fora; no máximo deslocar o recorte mantendo a cabeça inteira.
 - **Legenda**: blocos de 1 a 4 palavras, unidade de sentido; nunca terminar em artigo/preposição/conjunção/"que"; ponto
   e vírgula fecham o bloco; sem frase nova no meio; bloco < 0,28 s se junta ao vizinho; cortar ANTES de conector.
+- **Fonte vertical no YT (1920×1080)**: sai um recorte 16:9 cheio em volta do rosto (sem blur). Em selfie bem perto o
+  rosto enche o quadro e a legenda cai no queixo: confira a folha do YT e, nesse caso, pergunte ao usuário se quer o YT
+  (`yt_rosto` sobe/desce o rosto no quadro; `yt_zoom_cheio` > 1 fecha mais).
 - **Altura da legenda fixa** (fonte 16:9: `leg169=(66, 1260)`; o motor limita a base a 65 % da altura no RL). Não subir
   pra cima da cabeça nem descer pro peito pra desviar de objeto. Exceção automática: nos punch-ins a legenda desce pra
   fora do queixo (`leg_punch`, `leg_punch_rl=True`).
