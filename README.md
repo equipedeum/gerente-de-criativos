@@ -6,23 +6,23 @@ preparador, titulista, um editor por estilo, revisores de legenda e de imagem e 
 
 ## Instalar (Mac ou Windows)
 
-Antes: ter o Claude Code (app ou terminal), o Node.js (pra rodar o `npx`) e o convite deste repositório aceito
-no GitHub (ele é privado), com o GitHub logado no computador.
+Antes: ter o app do Claude com o Claude Code.
 
-1. No Terminal, instale a skill:
-   ```bash
-   npx skills add rafaelextremo/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
-   ```
-2. Abra o Claude Code e peça: **"instala o gerente de criativos"**.
+1. Abra o Claude Code (aba de código do app) em qualquer pasta.
+2. Cole o link deste repositório e peça: **"clona esse repositório na minha pasta pessoal e instala o gerente de criativos"**.
 3. No fim, abra uma conversa nova do Claude Code na pasta `gerente-de-criativos` (na sua pasta pessoal) e fale com o
    Gerente.
 
-Sem o `npx`: abra o Claude Code em qualquer pasta, cole o link deste repositório e peça **"clona esse repositório em
-~/gerente-de-criativos e instala"**.
+Quem já usa o `npx` pode instalar a skill direto:
+```bash
+npx skills add rafaelextremo/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
+```
+e depois pedir **"instala o gerente de criativos"**.
 
 O Claude baixa o projeto, confere o que falta no computador e pede o seu OK antes de instalar cada programa (Homebrew,
-Python 3.12, ffmpeg, Node.js) e antes dos downloads grandes (modelo de transcrição ~480 MB, pacotes ~300 MB). No fim
-ele faz um vídeo de teste de poucos segundos. Tudo roda no seu computador.
+Python 3.12, ffmpeg, Node.js, Git) e antes dos downloads grandes (modelo de transcrição ~480 MB, pacotes ~300 MB). Se o
+instalador pedir a senha do computador, quem digita é você. No fim ele faz um vídeo de teste de poucos segundos. Tudo
+roda no seu computador. Se algo falhar no meio, peça: **"confere a instalação e me diz o que está faltando"**.
 
 ## Usar
 
@@ -36,7 +36,7 @@ Mande o vídeo (arraste o arquivo pra conversa ou diga o caminho) e peça pra ed
 5) Hyperframe (tela dividida: pessoa embaixo, lettering e ícones em cima)
 6) Paper (papel creme com recortes em cima, pessoa embaixo, legenda karaokê)
 7) VOX (colagem documental estilo explainer)
-8) Extremo (motion design de interface, escuro e laranja)
+8) Tech (motion design de interface, escuro e laranja)
 9) Edição animada (documentário ilustrado em tela cheia)
 10) Animação viral (desenho 3D de bonequinho)
 ```
@@ -57,9 +57,9 @@ Responda com os números. Cada versão ganha um código (`#CR01`, `#CR02`…) e 
 | `skills/gerente-de-criativos/` | a skill instaladora (a que o `npx skills add` instala) |
 | `.claude/skills/` | o processo de cada estilo, a instalação e as skills do HyperFrames |
 | `work/` | preparo, versão básica e fila (`work/pipeline/`) |
-| `hyperframes/` | motores dos estilos em HyperFrames (Hyperframe, VOX, Extremo, Edição animada) e moldes em `exemplos/` |
+| `hyperframes/` | motores dos estilos em HyperFrames (Hyperframe, VOX, Tech, Edição animada) e moldes em `exemplos/` |
 | `remotion/` | Paper e Animação viral (Remotion) |
 | `ferramentas/` | fontes livres (OFL) e ícones Phosphor (MIT) |
-| `brutos/`, `saidas/`, `trilhas/`, `referencias/` | seus vídeos e entregas (nunca vão pro GitHub) |
+| `brutos/`, `saidas/`, `trilhas/`, `referencias/` | seus vídeos e entregas (ficam só no seu computador) |
 
 Material de terceiros e licenças: `TERCEIROS.md`.

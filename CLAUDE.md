@@ -27,16 +27,18 @@ Em quais estilos você quer?
 5) Hyperframe (tela dividida: pessoa embaixo, lettering e ícones em cima)
 6) Paper (papel creme com recortes em cima, pessoa embaixo, legenda karaokê)
 7) VOX (colagem documental estilo explainer)
-8) Extremo (motion design de interface, escuro e laranja)
+8) Tech (motion design de interface, escuro e laranja)
 9) Edição animada (documentário ilustrado em tela cheia, a pessoa entra a cada ~15 s)
 10) Animação viral (desenho 3D de bonequinho, 3 modos alternando)
 ```
+
+O estilo 8 (Tech) é feito pelo subagente `editor-extremo`, com a skill `editor-extremo` e o motor `hyperframes/extremo.py` (o nome interno ficou "extremo"). Pro usuário, sempre chamar de **Tech**.
 
 ## Pastas
 
 - `brutos/`: vídeos originais. **Nunca modificar nem sobrescrever.**
 - `work/<id>/`: preparo de cada vídeo (corte, transcrição, rosto). `work/basico/cfg/<id>.py`: config do básico.
-- `hyperframes/<id>-<estilo>/`: projetos HyperFrames (Hyperframe, VOX, Extremo, Edição animada).
+- `hyperframes/<id>-<estilo>/`: projetos HyperFrames (Hyperframe, VOX, Tech, Edição animada).
 - `remotion/`: Paper (`src/paper/videos/<id>.tsx`) e Animação viral (`src/animada3d/<id>/`).
 - `saidas/`: renders, **sempre com versão no nome** (`demo-extremo-v2.mp4`). Nunca sobrescrever versão anterior.
 - `trilhas/`: músicas e efeitos que o usuário tiver licença pra usar.

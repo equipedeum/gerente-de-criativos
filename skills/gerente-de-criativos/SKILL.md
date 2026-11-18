@@ -31,11 +31,8 @@ espaço). Se o usuário preferir outro lugar, usar o que ele disser, desde que n
    ```bash
    git clone https://github.com/rafaelextremo/gerente-de-criativos.git ~/gerente-de-criativos
    ```
-3. Se der erro de acesso (`Repository not found`, 403, pedido de senha): o repositório é privado. O usuário precisa
-   (a) ter aceitado o convite do GitHub (chega por e-mail; ou em github.com/rafaelextremo/gerente-de-criativos/invitations)
-   e (b) estar logado no GitHub neste computador. Pra logar, com OK dele: instalar o GitHub CLI (`brew install gh` no
-   Mac, `winget install GitHub.cli` no Windows), rodar `gh auth login` (ele escolhe GitHub.com → HTTPS → login pelo
-   navegador) e `gh auth setup-git`. Depois clonar de novo.
+3. Se der erro de rede ou de acesso: conferir a internet e tentar de novo. O repositório é público, não precisa de
+   login no GitHub.
 
 ## 3. Instalar as ferramentas
 
