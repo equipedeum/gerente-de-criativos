@@ -28,6 +28,8 @@ Hoje eu trabalho | 8 horas | e entrego | o dobro.
 E o melhor: | sobra tempo | para pensar | no que faz | a empresa crescer.
 Se você quer | o modelo | que eu uso | para fazer | essa lista, | clica no link | aqui embaixo.""",
     leg_estilo=None,                      # None = legenda simples (1 linha, branca, sombra leve, SEM animação) — PADRÃO
+    # leg_fundo_claro=True,              # fundo claro/carregado atrás da legenda (papel, telão, tela filmada): contorno fino +
+    #                                     # sombra forte na letra, decidido por bloco (e no título). NUNCA faixa escura.
     # leg_estilo="serif", leg_chave=False,  # legenda animada (menu 3/4): frase em até 2 linhas montando palavra por palavra
 
     # ---- enquadramento (TELA CHEIA sempre; nunca letterbox, faixa desfocada ou quadro)

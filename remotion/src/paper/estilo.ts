@@ -7,6 +7,7 @@ export const COR = {
   // Na referência é vermelho-alaranjado (#E2402D); em 08/10/2026 o usuário pediu "trocar o laranja pelo verde".
   // Esmeralda da marca no tom 600 (o #10B981 do site fica com contraste 2,2:1 sobre o creme; este, 3,3:1).
   destaque: '#059669',
+  destaqueEscuro: '#065F46', // sombra do Botao (par do destaque)
   azul: '#2D52A0', // segundo destaque (carimbo "DADO VERDADEIRO", blocos PIB)
   amarelo: '#F0BE2E', // moedas, régua, lâmpada
   creme: '#F6F0E2', // cartões e faixa da legenda (medido #f6f0e2)

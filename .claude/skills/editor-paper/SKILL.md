@@ -54,6 +54,15 @@ do RL: `paper-<id>-YT`, `-IN`, `-GL` → `../saidas/<id>-paper-v1-YT.mp4` etc.
 - **YT** 1920×1080: papel à esquerda, pessoa à direita, rasgo vertical, legenda sobre o rasgo.
 - **IN** 1080×1350: dividido no meio. **GL** 1080×1080: papel em tela cheia alternando com a pessoa em tela cheia nos
   trechos `pessoaGL` (frase inteira; sons mudos nesses trechos).
+- **IN com os 3 modos** (fonte 16:9, 19/11/2026): `modosIN: {}` no vídeo faz o IN seguir o mesmo plano de modos do RL
+  (pessoa em tela cheia 1080×1350 com zoom leve, papel em tela cheia, dividida no resto) — use sempre que a fonte for
+  16:9, pela regra "a pessoa aparece cheia em todo formato". Ajustes: `modosIN: {yLegPessoa: 1000, dyPapel: 150,
+  yLegPapel: 1090}`. Na fonte recortada (celular) use `inComoGL`.
+- `papelIN: {s: 0.85, dy: -164}`: escala/altura do painel só no IN dividido, quando peça perto do topo do painel
+  (y ~140) sair cortada no IN. `xLegPessoa`: x do centro da legenda na pessoa cheia do RL (microfone de um lado →
+  legenda um pouco pro outro).
+- **Cor da marca**: `destaque: {cor: '<cor_destaque do projeto.json>', escuro: '<a mesma ~35 % mais escura>'}` no vídeo
+  troca o verde do karaokê, carimbos, setas e botão. Sem o campo = verde `#059669`.
 
 ## Regras do estilo
 

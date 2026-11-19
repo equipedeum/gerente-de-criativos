@@ -88,8 +88,22 @@ export type VideoPapel = {
   // topo da cabeça (= cy − `cabeca`) sempre `folga` px abaixo da borda rasgada; o zoom parte do topo da cabeça, então
   // punch-in nunca esconde a cabeça sob o rasgo. Campo opcional: vídeos antigos não mudam.
   aberto?: {zoom: number; cabeca: number; folga?: number; trilha: {dt: number; cx: number[]; cy: number[]}};
+  // Cor de destaque da marca (19/11/2026): karaokê, carimbos, setas, botão etc. `escuro` = sombra do Botao. Sem o campo =
+  // verde padrão. O molde preenche com o `cor_destaque` do projeto.json (escuro = a mesma cor ~35 % mais escura).
+  destaque?: {cor: string; escuro: string};
+  // IN com os 3 MODOS do RL (19/11/2026; regras "3 modos" e "a pessoa aparece cheia em todo formato"): o IN segue o mesmo
+  // plano de modos do RL (planoModos) — pessoa em TELA CHEIA 1080x1350 (16:9 ampliado 1,25x, zoom leve, legenda em
+  // `yLegPessoa`), papel em TELA CHEIA (painel 1080x960 em `dyPapel`, legenda em `yLegPapel`) e a tela dividida de sempre
+  // no resto. Sons mudos na pessoa cheia. Só fonte 16:9 (não recortado). Campo opcional: vídeos antigos não mudam.
+  modosIN?: {yLegPessoa?: number; dyPapel?: number; yLegPapel?: number};
+  // x do centro da legenda na pessoa em TELA CHEIA do RL (padrão 540): microfone de um lado = legenda um pouco pro outro.
+  xLegPessoa?: number;
+  // Só no IN dividido: escala `s` e y `dy` do painel 1080x960 (centrado na horizontal). Padrão 0,85 e −164 (o painel do
+  // y 190 pra baixo). Use quando peças perto do topo do painel (y ~140) saírem cortadas no IN. Opcional: o RL não muda.
+  papelIN?: {s: number; dy: number};
   Cenas: React.FC;
 };
+const DESTAQUE_PADRAO = {cor: COR.destaque, escuro: COR.destaqueEscuro};
 
 // Zoom leve contínuo na pessoa (RL e YT; 26/10/2026): 1,00 ↔ 1,06 num ciclo de 7 s, senoidal — nunca para mais de 4 s.
 export const zoomLeve = (t: number) => 1 + 0.03 * (1 - Math.cos((2 * Math.PI * t) / 7));
@@ -451,6 +465,36 @@ const PaperFormato: React.FC<{v: VideoPapel; f: Exclude<Formato, 'RL'>}> = ({v, 
     const hPap = dIN + 28;
     // divisão mais alta (selfie): conteúdo do painel (y 190–860) cabe entre 40 px do topo e a faixa da legenda
     const sPap = dIN < 655 ? (dIN - 90) / 670 : (0.85 * hPap) / 683;
+    // 3 modos no IN (VideoPapel.modosIN): mesmo plano do RL; sem o campo = sempre dividido (como antes)
+    const mi = v.modosIN && !v.recortado ? v.modosIN : undefined;
+    let modoIN: 'dividido' | 'pessoa' | 'papel' = 'dividido';
+    let mudoIN: Trecho[] = [];
+    if (mi) {
+      const secs: Trecho[] = [];
+      coletarSecoes((Cenas as (p: object) => React.ReactNode)({}), secs);
+      const plano = planoModos(v, secs);
+      const dentro = (l: Trecho[]) => l.some(([a, b]) => t >= a && t < b);
+      modoIN = dentro(plano.pessoa) ? 'pessoa' : dentro(plano.papel) ? 'papel' : 'dividido';
+      mudoIN = plano.pessoa;
+    }
+    if (mi && modoIN !== 'dividido') {
+      const sT = 1350 / 1080;
+      return (
+        <AbsoluteFill style={{background: '#111'}}>
+          {modoIN === 'pessoa' ? (
+            // zoom leve a partir da linha de cima (punchTopo): a cabeça desce em vez de sair por cima
+            <PessoaCaixa v={v} c={{x: 0, y: 0, w: 1080, h: 1350}} s={sT} fx={540} fy={v.rosto.y * sT} punchTopo leve />
+          ) : (
+            <PapelCaixa c={{x: 0, y: 0, w: 1080, h: 1350}} rasgo={null} s={1} dx={0} dy={mi.dyPapel ?? 150}>
+              {cenas}
+            </PapelCaixa>
+          )}
+          <Audio src={staticFile(v.voz)} />
+          <Efeitos v={v} mudo={[...mudoIN, ...mudoInserto(v)]} />
+          {leg(540, modoIN === 'pessoa' ? mi.yLegPessoa ?? 1000 : mi.yLegPapel ?? 1090, 0.95)}
+        </AbsoluteFill>
+      );
+    }
     return (
       <AbsoluteFill style={{background: '#111'}}>
         {v.formatoIN ? (
@@ -471,8 +515,14 @@ const PaperFormato: React.FC<{v: VideoPapel; f: Exclude<Formato, 'RL'>}> = ({v, 
         )}
         <InsertoCaixa v={v} c={{x: 0, y: dIN, w: 1080, h: 1350 - dIN}} />
         <Audio src={staticFile(v.voz)} />
-        <Efeitos v={v} />
-        <PapelCaixa c={{x: 0, y: 0, w: 1080, h: hPap}} rasgo="baixo" s={sPap} dx={(1080 - 1080 * sPap) / 2} dy={dIN < 655 ? 40 - 190 * sPap : hPap - 31 - 960 * sPap}>
+        <Efeitos v={v} mudo={mudoIN} />
+        <PapelCaixa
+          c={{x: 0, y: 0, w: 1080, h: hPap}}
+          rasgo="baixo"
+          s={v.papelIN?.s ?? sPap}
+          dx={(1080 - 1080 * (v.papelIN?.s ?? sPap)) / 2}
+          dy={v.papelIN ? v.papelIN.dy : dIN < 655 ? 40 - 190 * sPap : hPap - 31 - 960 * sPap}
+        >
           {cenas}
         </PapelCaixa>
         {leg(540, dIN + 20, 0.92)}
@@ -618,13 +668,16 @@ const PaperRL: React.FC<{v: VideoPapel}> = ({v}) => {
           <Papel div={v.divisaoRL}>{cenas}</Papel>
         </>
       )}
-      {v.semLegenda ? null : <LegendaPapel blocos={v.legenda} cy={modo === 'dividido' ? div : modo === 'pessoa' ? v.yLegPessoa ?? Y_LEG_CHEIO.pessoa : Y_LEG_CHEIO.papel} />}
+      {v.semLegenda ? null : <LegendaPapel blocos={v.legenda} cx={modo === 'pessoa' ? v.xLegPessoa ?? 540 : 540} cy={modo === 'dividido' ? div : modo === 'pessoa' ? v.yLegPessoa ?? Y_LEG_CHEIO.pessoa : Y_LEG_CHEIO.papel} />}
     </AbsoluteFill>
   );
 };
 
 export const PaperVideo: React.FC<{nome: string; formato?: Formato}> = ({nome, formato = 'RL'}) => {
   const v = papelPorNome(nome);
+  // as peças leem COR.destaque na hora de desenhar: cada composição põe a cor do seu vídeo antes dos filhos
+  COR.destaque = v.destaque?.cor ?? DESTAQUE_PADRAO.cor;
+  COR.destaqueEscuro = v.destaque?.escuro ?? DESTAQUE_PADRAO.escuro;
   if (formato !== 'RL') return <PaperFormato v={v} f={formato} />;
   return <PaperRL v={v} />;
 };

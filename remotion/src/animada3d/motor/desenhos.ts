@@ -298,7 +298,7 @@ export const relogio = (p: Pen, m: number) => {
 };
 export { shade, mix };
 
-// ---------------- vídeos curtos / criativos (12/11/2026, piloto rf01; servem pra qualquer vídeo sobre conteúdo) ----------------
+// ---------------- vídeos curtos / criativos (12/11/2026, piloto; servem pra qualquer vídeo sobre conteúdo) ----------------
 const CORES_VID = ["#3f6fb5", "#e2453c", "#35b56a", "#7b5ac9", "#e8792c", "#22a7b6"];
 /** cartão de vídeo vertical (canvas 200 x 320): miniatura colorida com o botão de play; feio = torto e borrado (feito às pressas) */
 export const cartaoVideo = (p: Pen, cor = 0, feio = false) => {
@@ -359,4 +359,157 @@ export const lampada = (p: Pen) => {
   p.ell(120, 120, 62, 62, "#fff3b0", 10);
   p.poly(rr(92, 174, 148, 228, 10), "#8f9bb0", 9);
   p.stroke([[96, 192], [144, 192]], 6); p.stroke([[96, 208], [144, 208]], 6);
+};
+
+// ---------------- empresa de agentes (17/11/2026; servem pra qualquer vídeo de equipe/IA/produção) ----------------
+/** relógio de parede com TEMPO GANHO (canvas 240 x 240): m 0..1 = volta do ponteiro grande; ganho 0..1 = fatia verde
+ *  (o tempo que sobrou) e a setinha de voltar quando ganho > 0 */
+export const relogioGanho = (p: Pen, m: number, ganho = 0) => {
+  p.ell(120, 120, 104, 104, "#fbf7ee", 12);
+  if (ganho > 0) {
+    const g = p.g, a0 = rad(m * 360 - 90), a1 = a0 - rad(Math.min(1, ganho) * 360);
+    g.beginPath(); g.moveTo(120, 120); g.arc(120, 120, 86, a1, a0); g.closePath(); g.fillStyle = "rgba(53,181,106,0.85)"; g.fill();
+  }
+  for (let i = 0; i < 12; i++) { const a = rad(i * 30); p.stroke([[120 + 78 * Math.cos(a), 120 + 78 * Math.sin(a)], [120 + 90 * Math.cos(a), 120 + 90 * Math.sin(a)]], i % 3 ? 5 : 9); }
+  const am = rad(m * 360 - 90), ah = rad((m / 12) * 360 + 60);
+  p.stroke([[120, 120], [120 + 52 * Math.cos(ah), 120 + 52 * Math.sin(ah)]], 12);
+  p.stroke([[120, 120], [120 + 76 * Math.cos(am), 120 + 76 * Math.sin(am)]], 8, "#e2453c");
+  p.ell(120, 120, 10, 10, INK, 0);
+};
+/** seta curva de "voltar" (canvas 300 x 300), verde: o relógio devolvendo tempo */
+export const setaVolta = (p: Pen, cor = "#35b56a") => {
+  const pts: P2[] = [];
+  for (let i = 0; i <= 24; i++) { const a = rad(-20 - (i / 24) * 250); pts.push([150 + 104 * Math.cos(a), 150 + 104 * Math.sin(a)]); }
+  p.stroke(pts, 46, INK); p.stroke(pts, 30, cor);
+  const [ex, ey] = pts[pts.length - 1], a = rad(-20 - 250);
+  const tx = -Math.sin(a), ty = Math.cos(a);   // tangente no fim (sentido anti-horário)
+  p.poly([[ex + 44 * Math.cos(a), ey + 44 * Math.sin(a)], [ex - 44 * Math.cos(a), ey - 44 * Math.sin(a)], [ex - 52 * tx, ey - 52 * ty]], cor, 10);
+};
+/** onda de som num painel (canvas 400 x 200): barras pulsando com k (contínuo, qualquer número) */
+export const ondaSom = (p: Pen, k: number, cor = "#7af0ff") => {
+  p.poly(rr(10, 10, 390, 190, 40), "#1f2633", 12);
+  for (let i = 0; i < 15; i++) {
+    const x = 52 + i * 21.2, h = 14 + 58 * Math.abs(Math.sin(k * 6.3 + i * 0.9) * Math.sin(i * 0.55 + 0.4));
+    p.stroke([[x, 100 - h], [x, 100 + h]], 11, cor);
+  }
+};
+/** cartão de título (canvas 320 x 200): faixa colorida em cima e duas barras grossas no lugar do texto (sem texto) */
+export const cartaoTitulo = (p: Pen, cor = 0) => {
+  const c = CORES_VID[cor % CORES_VID.length];
+  p.poly(rr(12, 12, 308, 188, 22), "#fbf7ee", 12);
+  p.clip(rr(12, 12, 308, 188, 22), () => p.poly([[0, 0], [320, 0], [320, 58], [0, 58]], c, 0));
+  p.stroke([[12, 58], [308, 58]], 8);
+  p.stroke([[46, 100], [274, 100]], 26, INK);
+  p.stroke([[46, 146], [200, 146]], 18, mix(c, "#7b8494", 0.5));
+};
+/** tela de edição de vídeo (canvas 320 x 200), um ESTILO por editor, sem texto; k = andamento (em loop):
+ *  0 papel recortado · 1 3D (cubo girando) · 2 legenda (rosto + barra de legenda) · 3 tela dividida · 4 cortes na linha
+ *  do tempo · 5 cor (rodas de cor) · 6 animação (bolinha quicando) */
+export const telaEdicao = (p: Pen, estilo: number, k: number) => {
+  k = ((k % 1) + 1) % 1;
+  p.poly(rr(8, 8, 312, 192, 14), "#1c2333", 8);
+  p.poly(rr(20, 20, 300, 40, 6), "#2f3b55", 0);
+  ["#e2453c", "#f0b429", "#35b56a"].forEach((c, i) => p.ell(34 + i * 16, 30, 5, 5, c, 0));
+  const A = rr(24, 48, 296, 184, 8), fundo = (c: string) => p.poly([[0, 0], [320, 0], [320, 200], [0, 200]], c, 0);
+  p.clip(A, () => {
+    const e = estilo % 7, s = Math.sin(k * Math.PI * 2);
+    if (e === 0) {
+      fundo("#f3e2c4");
+      p.poly([[50 + 8 * s, 170], [110 + 8 * s, 80], [170 + 8 * s, 170]], "#e2453c", 6);
+      p.poly(rr(160, 96 - 10 * s, 250, 160 - 10 * s, 6), "#3f6fb5", 6);
+      p.ell(240, 76, 24, 24, "#f0b429", 6);
+    } else if (e === 1) {
+      fundo("#26364d");
+      const a = k * Math.PI * 2, cx = 160, cy = 100, r = 46;
+      const v = [0, 1, 2, 3].map((i) => [cx + r * Math.cos(a + (i * Math.PI) / 2), cy + 16 * Math.sin(a + (i * Math.PI) / 2)] as P2);
+      const fr = [0, 1, 2, 3].map((i) => [v[i], v[(i + 1) % 4]] as [P2, P2]).filter(([u, w]) => u[1] + w[1] > 2 * cy - 1);
+      for (const [u, w] of fr) p.poly([u, w, [w[0], w[1] + 62], [u[0], u[1] + 62]], "#6a4fb8", 6);
+      p.poly(v, "#b9a4f0", 6);
+    } else if (e === 2) {
+      fundo("#9cc9e8");
+      p.ell(160, 96, 34, 38, "#e0a77d", 6); p.poly(rr(110, 130, 210, 200, 30), "#3f6fb5", 6);
+      p.poly(rr(64, 150, 256, 174, 8), "rgba(20,20,30,0.75)", 0);
+      p.stroke([[80, 162], [80 + 160 * (0.3 + 0.7 * k), 162]], 9, "#ffd84a");
+    } else if (e === 3) {
+      p.poly([[0, 0], [320, 0], [320, 116], [0, 116]], "#35b56a", 0);
+      p.poly([[0, 116], [320, 116], [320, 200], [0, 200]], "#e8792c", 0);
+      p.stroke([[24, 116], [296, 116]], 6, "#ffffff");
+      p.ell(160 + 60 * s, 82, 18, 18, "#ffffff", 5); p.ell(160, 156, 22, 22, "#fbe1c8", 5);
+    } else if (e === 4) {
+      fundo("#2a3448");
+      p.poly(rr(40, 58, 280, 112, 6), "#3f9be0", 0);
+      const cores = ["#e2453c", "#35b56a", "#f0b429", "#c77dff", "#22a7b6"];
+      for (let i = 0; i < 6; i++) { const x = 30 + ((i * 52 - k * 52 + 520) % 312); p.poly(rr(x, 128, x + 44, 150, 4), cores[i % 5], 0); p.poly(rr(x + 6, 156, x + 38, 172, 4), "#55607a", 0); }
+      p.stroke([[160, 120], [160, 180]], 5, "#ffffff");
+    } else if (e === 5) {
+      fundo("#2b2f3a");
+      ([["#e2453c", 80], ["#35b56a", 160], ["#3f9be0", 240]] as [string, number][]).forEach(([c, x], i) => {
+        p.ell(x, 112, 32, 32, c, 6);
+        const a = k * Math.PI * 2 + i * 2;
+        p.ell(x + 18 * Math.cos(a), 112 + 18 * Math.sin(a), 7, 7, "#ffffff", 3);
+      });
+    } else {
+      fundo("#fff1d6");
+      p.stroke([[24, 176], [296, 176]], 6, "#c9a27a");
+      const bx = (u: number) => 60 + 200 * u, by = (u: number) => 166 - 100 * Math.abs(Math.sin(u * Math.PI * 3));
+      for (let j = 3; j > 0; j--) p.ell(bx(k - j * 0.06), by(k - j * 0.06), 13 - 2 * j, 13 - 2 * j, "rgba(226,69,60,0.35)", 0);
+      p.ell(bx(k), by(k), 15, 15, "#e2453c", 5);
+    }
+  });
+};
+/** carimbo de borracha (canvas 240 x 300): cabo de madeira, base vermelha; a marca que ele deixa é `marcaOk` */
+export const carimbo = (p: Pen) => {
+  p.ell(120, 58, 44, 40, "#b5733f", 10);
+  p.poly(rr(98, 84, 142, 180, 14), "#8a5a34", 10);
+  p.poly(rr(40, 176, 200, 222, 12), "#55607a", 10);
+  p.poly(rr(34, 220, 206, 262, 10), "#e2453c", 10);
+};
+/** marca do carimbo aprovado (canvas 300 x 300): anel de tinta verde com check, borda gasta, sem texto */
+export const marcaOk = (p: Pen) => {
+  const g = p.g;
+  p.arc(150, 150, 116, 116, 0, 360, 22, "#2f9e63");
+  p.arc(150, 150, 92, 92, 0, 360, 8, "#2f9e63");
+  p.stroke([[96, 156], [136, 196], [208, 112]], 30, "#2f9e63");
+  g.fillStyle = "rgba(251,247,238,0.9)";
+  for (let i = 0; i < 26; i++) { const a = i * 2.4, r = 92 + ((i * 37) % 30); g.fillRect(150 + r * Math.cos(a), 150 + r * Math.sin(a), 6, 3); }
+};
+/** nuvem com seta pra cima (canvas 400 x 300): "subir pra nuvem", sem marca */
+export const nuvemUp = (p: Pen, cor = "#8fd3ff") => {
+  const pts: P2[] = [];
+  for (let i = 0; i < 64; i++) {
+    const a = (i / 64) * Math.PI * 2, c = Math.cos(a), s = Math.sin(a);
+    const lob = s < 0 ? 1 + 0.22 * Math.abs(Math.sin(a * 3)) : 1;
+    pts.push([200 + 172 * c * lob, 180 + (s < 0 ? 120 : 70) * s * lob]);
+  }
+  p.poly(pts, cor, 12);
+  p.poly([[200, 80], [262, 154], [226, 154], [226, 226], [174, 226], [174, 154], [138, 154]], "#ffffff", 10);
+};
+/** selo redondo com o ícone da TAREFA de um funcionário (canvas 200 x 200), sem texto:
+ *  "audio" onda · "titulo" barras de título · "edicao" play · "lupa" · "ok" check · "nuvem" seta pra nuvem · "gerente" estrela */
+export type Tarefa = "audio" | "titulo" | "edicao" | "lupa" | "ok" | "nuvem" | "gerente";
+export const iconeTarefa = (p: Pen, tipo: Tarefa, cor = "#3f6fb5") => {
+  p.ell(100, 100, 86, 86, cor, 12);
+  const W = "#ffffff";
+  if (tipo === "audio") for (let i = 0; i < 5; i++) { const h = [18, 40, 56, 34, 22][i], x = 56 + i * 22; p.stroke([[x, 100 - h], [x, 100 + h]], 12, W); }
+  else if (tipo === "titulo") { p.stroke([[52, 78], [148, 78]], 22, W); p.stroke([[52, 122], [118, 122]], 16, W); }
+  else if (tipo === "edicao") p.poly([[78, 56], [144, 100], [78, 144]], W, 8);
+  else if (tipo === "lupa") { p.arc(88, 88, 34, 34, 0, 360, 14, W); p.stroke([[112, 112], [146, 146]], 18, W); }
+  else if (tipo === "ok") p.stroke([[58, 104], [88, 134], [144, 72]], 20, W);
+  else if (tipo === "nuvem") { p.ell(100, 110, 54, 30, W, 0); p.ell(78, 94, 28, 28, W, 0); p.ell(118, 86, 32, 32, W, 0); p.poly([[100, 70], [122, 98], [108, 98], [108, 126], [92, 126], [92, 98], [78, 98]], cor, 0); }
+  else { const pts: P2[] = []; for (let k = 0; k < 10; k++) { const r = k % 2 ? 24 : 56, a = rad(k * 36 - 90); pts.push([100 + r * Math.cos(a), 102 + r * Math.sin(a)]); } p.poly(pts, W, 8); }
+};
+/** tela de computador mostrando uma empresa vista de cima (canvas 320 x 200): mesinhas, gente mexendo e o gerente no
+ *  meio (k contínuo = movimento). Pra "a câmera entra no PC e chega num escritório". */
+export const telaEmpresa = (p: Pen, k: number) => {
+  p.poly(rr(8, 8, 312, 192, 14), "#1c2333", 8);
+  p.poly(rr(20, 20, 300, 40, 6), "#2f3b55", 0);
+  ["#e2453c", "#f0b429", "#35b56a"].forEach((c, i) => p.ell(34 + i * 16, 30, 5, 5, c, 0));
+  p.poly(rr(24, 48, 296, 184, 8), "#e9d9bd", 0);
+  for (let r = 0; r < 3; r++) for (let c = 0; c < 5; c++) {
+    if (r === 0 && c === 2) continue;
+    const x = 52 + c * 54, y = 76 + r * 40;
+    p.poly(rr(x - 18, y - 6, x + 18, y + 8, 3), "#b5733f", 3);
+    p.ell(x + 6 * Math.sin(k * 6 + r * 2 + c), y - 13, 7, 7, ["#e8792c", "#3f6fb5", "#35b56a"][(r + c) % 3], 2);
+  }
+  p.ell(160, 74 + 4 * Math.sin(k * 5), 13, 13, "#eef2f6", 4); p.ell(160, 74 + 4 * Math.sin(k * 5), 6, 4, "#7af0ff", 0);
 };

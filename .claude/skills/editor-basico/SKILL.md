@@ -20,6 +20,12 @@ vídeo: `work/basico/cfg/<id>.py`, a partir do molde comentado `work/basico/cfg/
 
 A legenda simples é o padrão e **não muda de estilo sem pedido**.
 
+**Fundo claro ou carregado** atrás da legenda/título (papel branco, telão, tela de celular/computador filmada com texto e
+ícones): `leg_fundo_claro=True` no cfg. O motor mede a faixa atrás de cada bloco (e do título) no 1º quadro e, se for
+clara ou cheia de contraste, reforça **só a letra** — legenda simples: contorno 3 + sombra forte; animada: contorno 3
+nas palavras + sombra (1.0, 5, 3); título: traço 3 + sombra (1.0, 6, 3). **Nunca faixa/tarja escura atrás** (o usuário
+reprovou: "faixa preta ridícula").
+
 ## Modos
 
 ### MONTAR (sem render)

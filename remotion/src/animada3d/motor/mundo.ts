@@ -60,6 +60,9 @@ export type Tomada = {
   /** (opcional, vídeo só animação) segundos em que entra uma ação nova na tomada: o motor confere que nenhuma tomada
    *  longa (> 5,7 s) fica mais de 4 s sem ação nova (ver conferirTomadas em Viral.tsx) */
   acoes?: number[];
+  /** (opcional, 17/11/2026) multiplica a distância da névoa (perto e longe) só nesta tomada: > 1 pra zoom out bem
+   *  aberto (ex.: 3 = névoa 3x mais longe), sem lavar o fundo */
+  nevoa?: number;
   palco: (c: Ctx) => void;
 };
 
@@ -269,7 +272,7 @@ export class Mundo {
     const e = K.sky.e.map((deg) => THREE.MathUtils.degToRad(deg));
     su.e.value.set(e[1], e[2], e[3], e[4]);
     this.sky.position.copy(cam.position);
-    untone(L.fog, this.fog.color); this.fog.near = L.fogNear; this.fog.far = L.fogFar;
+    untone(L.fog, this.fog.color); this.fog.near = L.fogNear * (s.nevoa ?? 1); this.fog.far = L.fogFar * (s.nevoa ?? 1);
     scene.fog = this.fog; scene.background = null;
     this.sunDisc.visible = s.luz === "golden";
     if (this.sunDisc.visible) {

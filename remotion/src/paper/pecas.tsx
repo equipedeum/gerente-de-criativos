@@ -693,7 +693,7 @@ export const Botao: React.FC<{txt: string; tClique?: number; tam?: number}> = ({
   const aperta = tClique === undefined ? 0 : rampa(t, tClique, 0.06) * (1 - rampa(t, tClique + 0.14, 0.12));
   return (
     <div style={{position: 'relative', paddingBottom: 12}}>
-      <div style={{position: 'absolute', left: 0, right: 0, top: 12, bottom: 0, background: '#065F46', borderRadius: 22}} />
+      <div style={{position: 'absolute', left: 0, right: 0, top: 12, bottom: 0, background: COR.destaqueEscuro, borderRadius: 22}} />
       <div
         style={{
           position: 'relative',

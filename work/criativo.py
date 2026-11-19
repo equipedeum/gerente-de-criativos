@@ -120,6 +120,13 @@ def titulo_edits(img, linhas, yc=None):
         tam -= 4
     f = ImageFont.truetype(HELV_BOLD, tam)
     passo = int(tam * 1.13); y0 = (SPLIT if yc is None else yc) - passo * len(linhas) / 2 + passo / 2
+    if LEG_FUNDO_CLARO:   # 18/11: título branco em cima de fundo claro (telão, papel) — decide 1 vez por formato
+        k = ("tit", FORMATO_ATUAL)
+        if k not in _CLARO_BLOCO:
+            fx = img.crop((int(W * 0.12), max(0, int(y0 - passo * 0.6)), int(W * 0.88), min(H, int(y0 + passo * (len(linhas) - 0.4))))).convert("L")
+            _CLARO_BLOCO[k] = float(np.asarray(fx, float).mean()) > 150
+        # 19/11 (usuário: "faixa preta ridícula atrás do título"): NADA de faixa escura; o reforço é só na própria letra
+    tit_forte = LEG_FUNDO_CLARO and _CLARO_BLOCO.get(("tit", FORMATO_ATUAL), False)
     lay = Image.new("RGBA", (W, H), (0, 0, 0, 0))
     for i, ln in enumerate(linhas):
         # 26/10 (usuário, caso real: "não ficou centralizado linha 1 e 2"): cada linha é desenhada à parte e centrada pelo
@@ -130,10 +137,10 @@ def titulo_edits(img, linhas, yc=None):
             if _e_emoji(ch):
                 ap = _apple(ch, tam)
                 if ap: l2.alpha_composite(ap, (int(x), int(yc - ap.height / 2))); x += ap.width
-            else: d.text((x, yc), ch, font=f, fill=WHITE, anchor="lm", stroke_width=2, stroke_fill=(0, 0, 0)); x += f.getlength(ch)
+            else: d.text((x, yc), ch, font=f, fill=WHITE, anchor="lm", stroke_width=3 if tit_forte else 2, stroke_fill=(0, 0, 0)); x += f.getlength(ch)
         bb = l2.getbbox()
         if bb: lay.alpha_composite(l2.crop(bb), (int(round((W - (bb[2] - bb[0])) / 2)), bb[1]))
-    com_sombra(img, lay, 0.35, 5, 2)
+    com_sombra(img, lay, *((1.0, 6, 3) if tit_forte else (0.35, 5, 2)))
 
 def titulo(img, linhas, yc=None):
     if TITULO_EDITS: return titulo_edits(img, linhas, yc)
@@ -242,21 +249,40 @@ def legenda_serif(img, b, t, corpo, yb):
                 dg.text((xw, y0 + 5 + dy), tok, font=zf, fill=LEG_COR + (round(200 * v),), anchor="ls", stroke_width=6, stroke_fill=LEG_COR + (round(200 * v),))
                 tem_glow = True
         else:
-            d.text((x, y0 + dy), tok, font=fs, fill=WHITE[:3] + (a_,), anchor="ls")
+            d.text((x, y0 + dy), tok, font=fs, fill=WHITE[:3] + (a_,), anchor="ls",
+                   stroke_width=LEG_TRACO, stroke_fill=(0, 0, 0, round(a_ * 0.85)))
     if tem_glow: img.alpha_composite(glow.filter(ImageFilter.GaussianBlur(16)))   # brilho suave atrás da palavra-chave
     com_sombra(img, lay, *LEG_SOMBRA)   # (alpha, blur, dy); um teste de 19/10 usou sombra mais forte na própria letra
+
+# Legenda/título sobre fundo claro ou carregado (18–19/11/2026). Opt-in no cfg: leg_fundo_claro=True.
+# REGRA do usuário (19/11): NUNCA faixa/tarja escura atrás do texto ("faixa preta ridícula"). O reforço é só na letra:
+# contorno escuro fino (3 px) + sombra forte. Decidido no 1º quadro de cada bloco, pra não piscar.
+LEG_FUNDO_CLARO = False; _CLARO_BLOCO = {}; LEG_TRACO = 0   # LEG_TRACO: contorno das palavras da legenda animada (só fundo claro)
+def _fundo_claro(img, b, yb):
+    k = (FORMATO_ATUAL, b["s"])
+    if k not in _CLARO_BLOCO:
+        y0 = max(0, int(yb) - 110); y1 = min(H, int(yb) + 25)
+        _a = np.asarray(img.crop((int(W * 0.15), y0, int(W * 0.85), y1)).convert("L"), float)
+        # fundo claro (papel, telão branco) OU carregado (tela de celular/computador com texto e ícones: muito contraste)
+        _CLARO_BLOCO[k] = float(_a.mean()) > 165 or (float(_a.std()) > 55 and float(np.percentile(_a, 90)) > 170)
+    return _CLARO_BLOCO[k]
 
 def legenda(img, blocos, t, forte=False):   # forte: contorno preto (sobre fundo claro, ex.: inserto da plataforma)
     b = next((x for x in blocos if x["s"] <= t < x["e"]), None)
     if not b: return
+    claro = False
+    if LEG_FUNDO_CLARO and not forte:
+        _tam, _yb = LEGENDA_FMT.get(FORMATO_ATUAL, (51, 0.634))
+        claro = _fundo_claro(img, b, LEG_OVERRIDE[1] if LEG_OVERRIDE else H * _yb)
+        if claro and LEG_ESTILO == "serif": forte = True   # animada: o forte é sombra carregada + contorno na letra
     if LEG_ESTILO == "serif":
         tam, ybase = LEGENDA_FMT.get(FORMATO_ATUAL, (51, 0.634))
         yb = next((y for a, c, y in b.get("faixas", []) if a <= t < c), None) or (LEG_OVERRIDE[1] if LEG_OVERRIDE else H * ybase)
         if forte:   # sobre inserto (ex.: trechos do evento, 21/10): mesmo estilo, sombra mais forte na própria letra
-            global LEG_SOMBRA
-            antes = LEG_SOMBRA; LEG_SOMBRA = (1.0, 4, 3)
+            global LEG_SOMBRA, LEG_TRACO
+            antes = LEG_SOMBRA, LEG_TRACO; LEG_SOMBRA = (1.0, 5, 3); LEG_TRACO = 3 if claro else 0   # 19/11: fundo claro = contorno fino (sem faixa)
             try: return legenda_serif(img, b, t, LEG_OVERRIDE[0] if LEG_OVERRIDE else tam, yb)
-            finally: LEG_SOMBRA = antes
+            finally: LEG_SOMBRA, LEG_TRACO = antes
         return legenda_serif(img, b, t, LEG_OVERRIDE[0] if LEG_OVERRIDE else tam, yb)
     tam, ybase = LEGENDA_FMT.get(FORMATO_ATUAL, (51, 0.634))
     f = tk(LEG_OVERRIDE[0] if LEG_OVERRIDE else tam, 650)
@@ -272,6 +298,9 @@ def legenda(img, blocos, t, forte=False):   # forte: contorno preto (sobre fundo
         tj = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         ImageDraw.Draw(tj).rounded_rectangle((l - 26, tp - 18, r + 26, bt + 20), radius=18, fill=(0, 0, 0, 165))
         img.alpha_composite(tj)
+    if claro:   # fundo claro/carregado (opt-in): mesma legenda simples, com contorno escuro fino e sombra forte (sem tarja)
+        d.text((x0, round(yb)), b["txt"], font=f, fill=WHITE, anchor="ls", stroke_width=3, stroke_fill=(0, 0, 0, 215))
+        com_sombra(img, lay, 1.0, 5, 3); return
     d.text((x0, round(yb)), b["txt"], font=f, fill=WHITE, anchor="ls")
     com_sombra(img, lay, 0.55, 6, 2)
 
@@ -322,8 +351,9 @@ def rodar_formatos(CFG):
     for f in fmts: rodar(CFG, f)
 
 def rodar(CFG, formato="RL"):
-    global W, H, SPLIT, FORMATO_ATUAL, LEG_OVERRIDE, LEG_ESTILO, LEG_COR, LEG_CHAVE, LEG_ESTATICA
+    global W, H, SPLIT, FORMATO_ATUAL, LEG_OVERRIDE, LEG_ESTILO, LEG_COR, LEG_CHAVE, LEG_ESTATICA, LEG_FUNDO_CLARO
     FORMATO_ATUAL = formato; LEG_OVERRIDE = None
+    LEG_FUNDO_CLARO = bool(CFG.get("leg_fundo_claro"))   # 18/11: opt-in, ver _fundo_claro()
     LEG_ESTILO = CFG.get("leg_estilo"); LEG_CHAVE = CFG.get("leg_chave", True); LEG_COR = tuple(CFG.get("leg_cor_destaque", (0, 165, 97)))
     LEG_ESTATICA = CFG.get("leg_estatica", False)   # 29/10 (reportagem NSC): legenda simples SEM animação
     if formato != "RL" and CFG.get("titulo_fin") and formato in CFG.get("titulo_fin_em", ("YT",)): CFG = {**CFG, "titulo": CFG["titulo_fin"]}   # finais: quebra/emoji própria (t2, 13/10: emoji longe da haste)

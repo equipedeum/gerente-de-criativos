@@ -9,10 +9,17 @@
 //   estante()     estante de livros encostada na parede
 //   pracinha()    praça de pedra com casas em volta, árvores, bancos e postes
 //   festa()       festa de fim de ano: varais de bandeirinhas e de luzinhas acesas (bloom), palco baixo e mesas
+// (17/11/2026)
+//   predio()      prédio pequeno de empresa (objeto DINÂMICO) com janelas que acendem
+//   relogioPoste() relógio de rua num poste (o mostrador é carta: relogioGanho/relogio em desenhos.ts)
+//   escritorio()  escritório em corte (paredes baixas, sem teto, cabe numa grade de várias empresas) com N mesas
+//   mar()         mar com volume EMBAIXO D'ÁGUA (paredes e fundo azuis, a superfície vista de baixo): a câmera pode descer
+//   iceberg()     iceberg facetado: ponta pequena acima d'água, a parte gigante embaixo
+//   barco()       barquinho (objeto DINÂMICO) com cabine, mastro e vela; praia() areia + píer
 import * as THREE from "three";
 import { Batch, boxGeo, quad, V, lam, house, prop } from "./build";
-import { ctex, planksHD, cobbleHD, grassHD } from "./paint";
-import { tinta } from "./mundo";
+import { ctex, planksHD, cobbleHD, grassHD, water } from "./paint";
+import { tinta, peca } from "./mundo";
 
 const up = (x0: number, x1: number, z0: number, z1: number, y: number, tile: number) =>
   quad(V(x0, y, z1), V(x1, y, z1), V(x1, y, z0), V(x0, y, z0), (x1 - x0) / tile, (z1 - z0) / tile);
@@ -188,4 +195,145 @@ export const festa = (b: Batch, cx: number, cz: number, o: { largura?: number; p
     b.add(new THREE.CylinderGeometry(0.05, 0.05, 0.16, 10).translate(tx + 0.3, 0.82, tz + 0.1), tinta("#ffd84a"));
     b.add(new THREE.CylinderGeometry(0.05, 0.05, 0.16, 10).translate(tx + 0.45, 0.82, tz - 0.1), tinta("#8fd3ff"));
   }
+};
+
+// ---------------- empresa de agentes (17/11/2026) ----------------
+/** luz de janela acesa (emissiva: brilha com o bloom) */
+const LUZ_JANELA = new THREE.MeshBasicMaterial({ color: new THREE.Color(2.4, 1.85, 0.95), toneMapped: false });
+/** prédio pequeno de empresa: objeto DINÂMICO (registrar no `dyn` e pedir com c.obj). Base em y = 0, fachada pra +z,
+ *  porta e marquise na cor do teto. Filhos com nome: "luz" (janelas acesas) e "escuro" (apagadas): acender = trocar
+ *  a visibilidade dos dois. Pop/subida = escala do grupo. */
+export const predio = (o: { cor: string; w?: number; h?: number; d?: number; teto?: string; andares?: number; colunas?: number }) => {
+  const { cor, w = 2.4, h = 4.5, d = 2.2, teto = "#3b3f4a" } = o;
+  const andares = o.andares ?? Math.max(2, Math.round((h - 1.6) / 1.0)), colunas = o.colunas ?? Math.max(2, Math.round(w / 0.75));
+  const g = new THREE.Group();
+  g.add(peca(new THREE.BoxGeometry(w, h, d).translate(0, h / 2, 0), tinta(cor)));
+  g.add(peca(new THREE.BoxGeometry(w + 0.2, 0.25, d + 0.2).translate(0, h + 0.12, 0), tinta(teto)));
+  g.add(peca(new THREE.BoxGeometry(0.7, 1.0, 0.08).translate(0, 0.5, d / 2 + 0.03), tinta("#3b2a20")));
+  g.add(peca(new THREE.BoxGeometry(1.1, 0.1, 0.42).translate(0, 1.12, d / 2 + 0.2), tinta(teto)));
+  const sh = (h - 1.7) / andares, cw = (w - 0.36) / colunas;
+  const luz = new THREE.Group(), escuro = new THREE.Group();
+  luz.name = "luz"; escuro.name = "escuro";
+  const bl = new Batch(), be = new Batch(), vid = tinta("#2f3b55");
+  for (let a = 0; a < andares; a++) for (let c = 0; c < colunas; c++) {
+    const x = -w / 2 + 0.18 + (c + 0.5) * cw, y = 1.45 + (a + 0.5) * sh;
+    const geo = new THREE.BoxGeometry(cw * 0.62, sh * 0.58, 0.05).translate(x, y, d / 2 + 0.01);
+    bl.add(geo, LUZ_JANELA); be.add(geo, vid);
+  }
+  bl.build(luz, false); be.build(escuro, false);
+  g.add(luz, escuro);
+  luz.visible = false;
+  return g;
+};
+/** relógio de rua num poste (altura h). Devolve o centro do mostrador [x, y, z] (virado pra +z, ~0,9 m): desenhar
+ *  com carta (relogio / relogioGanho) com yaw 0 */
+export const relogioPoste = (b: Batch, x: number, z: number, h = 3.0): [number, number, number] => {
+  b.add(new THREE.CylinderGeometry(0.07, 0.1, h, 12).translate(x, h / 2, z), tinta("#2f3a4a"));
+  b.add(boxGeo(V(x - 0.55, h, z - 0.14), V(x + 0.55, h + 1.1, z + 0.12)), tinta("#2f3a4a"));
+  b.add(new THREE.ConeGeometry(0.3, 0.3, 4).rotateY(Math.PI / 4).translate(x, h + 1.25, z), tinta("#2f3a4a"));
+  return [x, h + 0.55, z + 0.14];
+};
+export type PostoE = Posto & { lado: number };
+/** escritório em CORTE (sem teto, paredes baixas nas laterais; frente aberta ou com mureta `frente` m): carpete,
+ *  parede do fundo com faixa e janelas, e as mesas (`linhas`: [dx das mesas, dz a partir da frente (negativo)]),
+ *  quem trabalha alternando de lado. Cabe numa GRADE de várias empresas. Devolve os postos na ordem das linhas. */
+export const escritorio = (b: Batch, o: {
+  cx: number; z0: number; larg: number; prof: number; parede: string; faixa?: string; carpete?: [string, string];
+  altura?: number; lateral?: number; frente?: number; janelas?: number; linhas: [number[], number][]; monitor?: number; tampo?: string;
+}): PostoE[] => {
+  const { cx, z0, larg, prof, parede, faixa, carpete = ["#9aa6ba", "#a6b1c3"], altura = 2.4, lateral = 1.1, frente = 0, janelas = 2 } = o;
+  const x0 = cx - larg / 2, x1 = cx + larg / 2, zb = z0 - prof;
+  b.add(up(x0, x1, zb, z0, 0.012, 2), lam("carpE" + carpete.join(""), () => ({ map: carpeteTex(carpete[0], carpete[1]) })));
+  const pm = tinta(parede);
+  b.add(boxGeo(V(x0 - 0.15, 0, zb - 0.15), V(x1 + 0.15, altura, zb)), pm);
+  for (const sx of [x0 - 0.15, x1]) b.add(boxGeo(V(sx, 0, zb), V(sx + 0.15, lateral, z0)), pm);
+  if (frente > 0) b.add(boxGeo(V(x0 - 0.15, 0, z0), V(x1 + 0.15, frente, z0 + 0.15)), pm);
+  if (faixa) b.add(boxGeo(V(x0 - 0.15, altura - 0.3, zb - 0.18), V(x1 + 0.15, altura, zb + 0.03)), tinta(faixa));
+  b.add(boxGeo(V(x0, 0, zb), V(x1, 0.12, zb + 0.04)), tinta("#8a5a34"));
+  for (let i = 0; i < janelas; i++) janela(b, zb, x0 + (larg * (i + 0.5)) / janelas, 0.95, Math.min(1.4, larg / janelas - 0.6), Math.min(1.1, altura - 1.4));
+  const out: PostoE[] = [];
+  o.linhas.forEach(([dxs, dz], li) => dxs.forEach((dx, ci) => {
+    const lado = (ci + li) % 2 ? 1 : -1;
+    out.push({ ...mesaPC(b, cx + dx, z0 + dz, { lado, w: 1.08, d: 0.6, monitor: o.monitor ?? 0.8, tampo: o.tampo ?? "#e8d2a6" }), lado });
+  }));
+  return out;
+};
+/** fundo do mar: degradê vertical (claro em cima, escuro embaixo) */
+const fundoMarTex = () => ctex("fundoMar", 64, 512, (g, r) => {
+  const gr = g.createLinearGradient(0, 0, 0, 512); gr.addColorStop(0, "#56bde0"); gr.addColorStop(0.35, "#2a86bf"); gr.addColorStop(1, "#0d2f5c");
+  g.fillStyle = gr; g.fillRect(0, 0, 64, 512);
+  for (let i = 0; i < 60; i++) { g.fillStyle = "rgba(255,255,255,0.05)"; g.fillRect(r() * 64, r() * 512, 3 + r() * 6, 2); }
+});
+/** mar: superfície em y = 0 (x0..x1, z0..z1), sem projetar sombra. `corte` = volume EMBAIXO D'ÁGUA (paredes azuis em
+ *  degradê, fundo a `fundo` m, e a superfície vista de baixo, clara): a câmera pode descer da superfície e ver o que
+ *  está embaixo d'água. Monta direto no root (Batches próprios). */
+export const mar = (root: THREE.Object3D, o: { x0: number; x1: number; z0: number; z1: number; corte?: { x0: number; x1: number; zb: number; zf: number; fundo: number } }) => {
+  const b = new Batch();
+  b.add(up(o.x0, o.x1, o.z0, o.z1, 0, 6), lam("marAgua", () => ({ map: water() })));
+  b.build(root, false);
+  const c = o.corte;
+  if (!c) return;
+  const w = new Batch(), fm = lam("fundoMar", () => ({ map: fundoMarTex(), side: THREE.DoubleSide })), y0 = -c.fundo, yt = -0.04;
+  w.add(quad(V(c.x0, y0, c.zb), V(c.x1, y0, c.zb), V(c.x1, yt, c.zb), V(c.x0, yt, c.zb)), fm);
+  w.add(quad(V(c.x1, y0, c.zf), V(c.x0, y0, c.zf), V(c.x0, yt, c.zf), V(c.x1, yt, c.zf)), fm);
+  w.add(quad(V(c.x0, y0, c.zf), V(c.x0, y0, c.zb), V(c.x0, yt, c.zb), V(c.x0, yt, c.zf)), fm);
+  w.add(quad(V(c.x1, y0, c.zb), V(c.x1, y0, c.zf), V(c.x1, yt, c.zf), V(c.x1, yt, c.zb)), fm);
+  w.add(up(c.x0, c.x1, c.zb, c.zf, y0, 4), tinta("#1d4a72"));
+  w.build(root, false);
+  // a superfície vista de baixo: clara, sem luz (de cima ela fica escondida pela água)
+  const dn = new THREE.Mesh(quad(V(c.x0, -0.02, c.zb), V(c.x0, -0.02, c.zf), V(c.x1, -0.02, c.zf), V(c.x1, -0.02, c.zb), (c.x1 - c.x0) / 6, (c.zf - c.zb) / 6),
+    new THREE.MeshBasicMaterial({ map: water(), color: new THREE.Color("#bfefff") }));
+  root.add(dn);
+};
+/** iceberg facetado em (x, z), escala s: a ponta (~6 m) acima d'água, branca; embaixo a parte GIGANTE (~31 m de fundo,
+ *  ~27 m de largura), azul-gelo. Cortado em y = 0 (as duas partes encaixam). */
+export const iceberg = (b: Batch, x: number, z: number, s = 1) => {
+  const cima: [number, number][] = [[0.0, 4.2], [0.6, 3.8], [2.0, 3.0], [3.6, 2.0], [5.0, 1.15], [6.2, 0.12]];
+  const baixo: [number, number][] = [[-31, 0.2], [-30, 2.6], [-27, 6.6], [-22, 10.6], [-16, 13.2], [-10, 13.6], [-5, 11], [-1.5, 7], [0.0, 4.2]];
+  const ruido = (a: number, y: number) => 1 + 0.16 * Math.sin(3 * a + y * 0.55) + 0.09 * Math.sin(7 * a - y * 0.9 + 1.3) + 0.05 * Math.sin(11 * a + 2.1);
+  const faz = (pts: [number, number][], cor: string) => {
+    const g = new THREE.LatheGeometry(pts.map(([y, r]) => new THREE.Vector2(r * s, y * s)), 11).toNonIndexed();
+    const p = g.attributes.position as THREE.BufferAttribute;
+    for (let i = 0; i < p.count; i++) {
+      const px = p.getX(i), py = p.getY(i), pz = p.getZ(i), a = Math.atan2(pz, px), k = ruido(a, py / s);
+      const tipX = py > 0 ? -0.18 * py : 0;   // a ponta pende um pouco pro lado
+      p.setXYZ(i, x + px * k + tipX, py, z + pz * k);
+    }
+    g.computeVertexNormals();
+    b.add(g, tinta(cor));
+  };
+  faz(cima, "#f4fbff");
+  faz(baixo, "#7cc0de");
+};
+/** barquinho: objeto DINÂMICO (registrar no `dyn`), proa pra +x, origem na linha d'água; o convés fica em y = BARCO_CONVES.
+ *  ~4,6 m de comprimento x 1,8 de largura, casco vermelho com faixa branca, cabine na frente com bandeirinha; o
+ *  convés de trás (x de -2 a 0) é onde vai o elenco. */
+export const BARCO_CONVES = 0.42;
+export const barco = (cor = "#e2453c") => {
+  const g = new THREE.Group(), L = 4.6, W = 1.8;
+  const sh = new THREE.Shape();
+  sh.moveTo(-L / 2, -0.35); sh.lineTo(L / 2 - 0.9, -0.35); sh.lineTo(L / 2, 0.5); sh.lineTo(-L / 2, 0.5); sh.closePath();
+  const casco = new THREE.ExtrudeGeometry(sh, { depth: W, bevelEnabled: false }).translate(0, 0, -W / 2);
+  g.add(peca(casco, tinta(cor)));
+  g.add(peca(new THREE.BoxGeometry(L - 1.0, 0.1, W + 0.04).translate(-0.4, 0.28, 0), tinta("#fbf4e4")));
+  g.add(peca(new THREE.BoxGeometry(L - 0.6, 0.06, W - 0.2).translate(-0.25, BARCO_CONVES + 0.03, 0), lam("planksHD", () => ({ map: planksHD() }))));
+  // cabine na frente (atrás da proa): o convés de trás fica livre pra quem vai a bordo aparecer, de qualquer lado
+  const cx = L / 2 - 1.55;
+  g.add(peca(new THREE.BoxGeometry(1.0, 0.85, 1.3).translate(cx, BARCO_CONVES + 0.42, 0), tinta("#fbf4e4")));
+  g.add(peca(new THREE.BoxGeometry(1.15, 0.12, 1.45).translate(cx, BARCO_CONVES + 0.9, 0), tinta("#3f6fb5")));
+  g.add(peca(new THREE.CylinderGeometry(0.04, 0.05, 1.5, 10).translate(cx, BARCO_CONVES + 1.7, 0), tinta("#6e4b33")));
+  const bandeira = new THREE.BufferGeometry().setFromPoints([V(cx, BARCO_CONVES + 2.4, 0), V(cx, BARCO_CONVES + 1.95, 0), V(cx - 0.7, BARCO_CONVES + 2.18, 0)]);
+  bandeira.computeVertexNormals();
+  g.add(peca(bandeira, tinta("#f0b429", { side: THREE.DoubleSide })));
+  return g;
+};
+/** praia: areia (x0..x1, z0..z1) com topo em `alt`, entrando um pouco no mar, e um píer de madeira saindo em +x a
+ *  partir de (x1, zp), `comp` m de comprimento */
+export const praia = (b: Batch, x0: number, x1: number, z0: number, z1: number, o: { alt?: number; zp?: number; comp?: number } = {}) => {
+  const { alt = 0.3, zp = (z0 + z1) / 2, comp = 6 } = o;
+  b.add(boxGeo(V(x0, -1.2, z0), V(x1, alt, z1)), tinta("#ecd9a8"));
+  b.add(boxGeo(V(x1 - 0.4, -1.2, z0), V(x1 + 0.8, alt * 0.4, z1)), tinta("#e2cc96"));
+  const mad = lam("planksHD", () => ({ map: planksHD() }));
+  b.add(boxGeo(V(x1 - 0.5, alt + 0.1, zp - 0.9), V(x1 + comp, alt + 0.22, zp + 0.9), 2), mad);
+  for (let i = 0; i <= Math.floor(comp / 1.5); i++) for (const s of [-0.8, 0.8]) b.add(new THREE.CylinderGeometry(0.09, 0.09, 2.0, 8).translate(x1 + i * 1.5, alt - 0.8, zp + s), tinta("#6e4b33"));
 };

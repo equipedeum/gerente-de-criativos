@@ -11,6 +11,8 @@ Gerente). Nunca sobrescrever saída (versão nova no nome). Nunca mexer em `brut
 - Legenda simples = 1 linha, branca, sombra leve, sem animação, altura FIXA do formato. A animada (2 linhas montando
   palavra por palavra) só quando escolhida no menu (3/4).
 - Fim do vídeo: vai até o fim do áudio, segura o último quadro ~0,4 s, fade curto já sem voz.
+- **Nunca faixa/tarja escura** atrás de título ou legenda. Fundo claro/carregado: reforço só na letra (contorno 3 +
+  sombra forte) — no básico, `leg_fundo_claro=True` no cfg decide sozinho por bloco (vale pro título também).
 
 ## Zona segura e movimento (todos)
 - Texto só na altura do peito: nunca lá em cima (o Instagram tampa), nunca baixo demais (RL: acima de 65 % da altura),
@@ -36,9 +38,11 @@ Gerente). Nunca sobrescrever saída (versão nova no nome). Nunca mexer em `brut
 ## Paper (menu 6)
 - Molde `remotion/src/paper/videos/demo.tsx`; scripts `preparar_paper.py`, `legenda_paper.py`, `sfx_auto.py`,
   `trilha_cheio.py` (16:9); render `bash remotion/render_paper.sh paper-<id>:../saidas/<id>-paper-v1.mp4`.
-- Sem som "papel"; sem etiqueta de seção; sem título; destaque verde `#059669`; número ruim/perda em vermelho; dinheiro
-  verde. Papel nunca vazio > ~0,5 s; conteúdo do papel de y ~330 a 860; cabeça nunca sob o rasgo.
-- GL: trechos `pessoaGL` = frase INTEIRA, a cada ~10 s.
+- Sem som "papel"; sem etiqueta de seção; sem título; destaque = `cor_destaque` do projeto.json (campo `destaque:
+  {cor, escuro}` no vídeo; sem ele, verde `#059669`); número ruim/perda em vermelho; dinheiro verde. Papel nunca vazio > ~0,5 s; conteúdo do papel de y ~330 a 860; cabeça nunca sob o rasgo.
+- GL: trechos `pessoaGL` = frase INTEIRA, a cada ~10 s. IN de fonte 16:9: `modosIN: {}` faz o IN alternar os 3 modos
+  como o RL (pessoa cheia / papel cheio / dividida) — use sempre, pra a pessoa aparecer cheia no IN. `papelIN: {s, dy}`
+  se peça perto do topo do painel sair cortada no IN; `xLegPessoa` tira a legenda de cima do microfone na pessoa cheia.
 
 ## VOX (menu 7)
 - Molde `hyperframes/exemplos/vox_gerar.py` (termina com `vox.aplicar()`); peça documento a cada 3–4 cenas, cena escura a
@@ -55,6 +59,13 @@ Gerente). Nunca sobrescrever saída (versão nova no nome). Nunca mexer em `brut
 ## Animação viral (menu 10)
 - Molde `remotion/src/animada3d/exemplo/`; T/D/A a cada 3–5 s; legenda só no T; `camD` em toda tomada D; render
   `bash remotion/render_a3d.sh <id>-animada3d:../saidas/<id>-animada3d-v1.mp4`.
+
+## YouTube dinâmico (menu 11)
+- Só YT 1920x1080. Preparo `--sem-corte --resolucao-original` (4K ideal). Cfg `work/yt/cfg/<id>.py` (molde `_modelo.py`,
+  tempos do pré-corte) → `./py work/yt/montar.py <id>` → relatório com 0/0/0 (corte com voz / zoom parecido / parado
+  > 4 s) → `bash work/yt/folha.sh <id> folha|trans` → render `bash work/yt/render.sh <id> v1` (fila).
+- Limpeza só de tropeço/repetição/recomeço; plano novo só no começo de frase; painel com o texto da marca a cada
+  ~10–20 s; capítulo a cada ~40–70 s; sem legenda; cor da pessoa intacta (camera.py em YUV).
 
 ## Autoconferência obrigatória (quem renderizou confere)
 `./py work/pipeline/folha_formatos.py <saida.png> <RL.mp4> [<IN.mp4> <GL.mp4> <YT.mp4>] --t 1,10,25,40,-1` → abrir a
