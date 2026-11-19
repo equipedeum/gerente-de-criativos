@@ -1,16 +1,19 @@
 """Preparo de um vídeo bruto para todos os editores (vertical de celular ou horizontal 16:9).
 
 Uso:
-    ./py work/pipeline/preparar.py <id> <vídeo> [--sem-corte] [--mao] [--sem-tratar-audio]
+    ./py work/pipeline/preparar.py <id> <vídeo> [--sem-corte] [--mao] [--sem-tratar-audio] [--resolucao-original]
 
     <id>                nome curto, sem espaço (ex.: v01, aula3, demo) — vira a pasta work/<id>/
     --sem-corte         o vídeo já veio editado: não corta as pausas
     --mao               gravação na mão/selfie: só corta pausas longas e para antes da última pausa (quando a pessoa
                         estica o braço pra parar a gravação)
     --sem-tratar-audio  não passa o filtro de voz (o áudio já veio tratado)
+    --resolucao-original  (horizontal) base_h.mov na resolução e no fps da câmera (4K fica 4K), só recortado pra 16:9.
+                        É o preparo do YouTube dinâmico (menu 11), junto com --sem-corte: o montar dele faz a limpeza
+                        e os punch-ins precisam da nitidez do 4K.
 
 Gera em work/<id>/:
-    base.mov            vertical 1620x2880 (celular)    OU    base_h.mov  horizontal 1920x1080
+    base.mov            vertical 1620x2880 (celular)    OU    base_h.mov  horizontal 1920x1080 (ou a resolução da câmera)
     voice.wav           voz 48 kHz mono (tratada: filtro de ruído leve + compressor + loudnorm -16 LUFS)
     voice16k.wav        16 kHz mono (transcrição)
     words_cut.json      palavras com tempo [{w, s, e, p}] (faster-whisper small, local)
@@ -71,6 +74,7 @@ def main():
     ap.add_argument('--sem-corte', action='store_true')
     ap.add_argument('--mao', action='store_true')
     ap.add_argument('--sem-tratar-audio', action='store_true')
+    ap.add_argument('--resolucao-original', action='store_true')
     a = ap.parse_args()
     if not re.fullmatch(r'[A-Za-z0-9_-]+', a.id):
         sys.exit('id só com letras, números, - e _ (sem espaço)')
@@ -106,6 +110,10 @@ def main():
     # 2. base cortada, SEM filtro de cor (a cor da pessoa nunca muda)
     if vertical:
         Wb, Hb, nome = 1620, 2880, 'base.mov'      # 1620x2880 deixa dar zoom 1,3–1,5 sem perder nitidez
+    elif a.resolucao_original:   # YouTube dinâmico: resolução da câmera, recortada pra 16:9 (números pares)
+        Wb = min(W0, round(H0 * 16 / 9)) // 2 * 2
+        Hb = round(Wb * 9 / 16) // 2 * 2
+        nome = 'base_h.mov'
     else:
         Wb, Hb, nome = 1920, 1080, 'base_h.mov'
     # HDR (iPhone com 'HDR' ligado na câmera): converte pra SDR BT.709 com tone mapping, senão a pele fica lavada/cinza.
@@ -129,7 +137,8 @@ def main():
     for velho in ('base.mov', 'base_h.mov'):
         if (D / velho).exists():
             (D / velho).unlink()   # intermediário refeito (o original está em brutos/)
-    ff('-i', SRC, '-filter_complex', vf + af + cat, '-map', '[v]', '-map', '[a]', '-r', '30',
+    fps = [] if (a.resolucao_original and not vertical) else ['-r', '30']   # YouTube dinâmico: fps da câmera
+    ff('-i', SRC, '-filter_complex', vf + af + cat, '-map', '[v]', '-map', '[a]', *fps,
        '-c:v', 'libx264', '-preset', 'fast', '-crf', '14', '-pix_fmt', 'yuv420p',
        '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv',
        '-c:a', 'pcm_s16le', str(D / nome))

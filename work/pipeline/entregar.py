@@ -1,6 +1,6 @@
 """Entrega de uma versão: valida e copia os MP4 pra <pasta_entrega>/<código>/ (padrão ~/Desktop/CRIATIVOS/PARA REVISAR).
 
-Uso: ./py work/pipeline/entregar.py "#CR07" <duração_s> RL=<mp4> [IN=<mp4>] [GL=<mp4>] [YT=<mp4>]
+Uso: ./py work/pipeline/entregar.py "#CR07" <duração_s> RL=<mp4> [IN=<mp4>] [GL=<mp4>] [YT=<mp4>]   (YouTube dinâmico: só YT=<mp4>)
 
 - Validação de cada arquivo: decodifica inteiro sem erro, tem vídeo e áudio, resolução certa
   (RL 1080x1920, IN 1080x1350, GL 1080x1080, YT 1920x1080) e duração ±0,3 s da informada. Falhou um -> não entrega nada.
@@ -45,7 +45,7 @@ def checar(fmt, v, dur):
 def main():
     cod, dur = sys.argv[1], float(sys.argv[2])
     pares = dict(x.split('=', 1) for x in sys.argv[3:])
-    if 'RL' not in pares:
+    if 'RL' not in pares and set(pares) != {'YT'}:   # YouTube dinâmico (menu 11) sai só no YT
         sys.exit('falta o RL')
     res, falhas = {}, []
     for fmt in ('RL', 'IN', 'GL', 'YT'):

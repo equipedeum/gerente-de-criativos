@@ -5,5 +5,10 @@
   "termos_transcricao": "",
   "prefixo_codigo": "CR",
   "pasta_entrega": "~/Desktop/CRIATIVOS/PARA REVISAR",
-  "cor_destaque": "#059669"
+  "cor_destaque": "#059669",
+  "cor_papel": "",
+  "cor_tinta": "",
+  "logo": "",
+  "logo_simbolo": "",
+  "slogan": ""
 }

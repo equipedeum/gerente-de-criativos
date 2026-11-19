@@ -3,7 +3,7 @@ Estado em work/pipeline/estado.json — a fila é a verdade, não a memória (de
 
 Uso: ./py work/pipeline/fila.py <comando> ...
     novo <id> <estilo> "<título>"     reserva o próximo código pra uma versão (estilo: basico, hyperframe, paper, vox,
-                                     extremo, animada, viral...) e imprime o código
+                                     extremo, animada, viral, yt...) e imprime o código
     status                           tudo, por status
     ver <código>                     detalhes de um código
     marcar <código> <etapa> [nota]   etapa: montagem | revisao_legenda | render | conferencia | revisao (entregue) | ajuste

@@ -10,6 +10,9 @@ referencias/*
 work/*/
 !work/basico/
 !work/pipeline/
+!work/yt/
+work/yt/cfg/*
+!work/yt/cfg/_modelo.py
 work/basico/cfg/*
 !work/basico/cfg/_modelo.py
 work/pipeline/estado.json
@@ -33,6 +36,7 @@ remotion/public/brutos/
 remotion/public-animada3d/*
 !remotion/public-animada3d/fontes/
 remotion/out/
+remotion/public-yt/
 # ferramentas instaladas na máquina
 ferramentas/venv/
 ferramentas/earshot-venv/

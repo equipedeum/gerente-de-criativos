@@ -30,16 +30,22 @@ Em quais estilos você quer?
 8) Tech (motion design de interface, escuro e laranja)
 9) Edição animada (documentário ilustrado em tela cheia, a pessoa entra a cada ~15 s)
 10) Animação viral (desenho 3D de bonequinho, 3 modos alternando)
+11) YouTube dinâmico (vídeo de canal 16:9: limpeza de tropeço, plano aberto/fechado, painel de texto, capítulos)
 ```
 
 O estilo 8 (Tech) é feito pelo subagente `editor-extremo`, com a skill `editor-extremo` e o motor `hyperframes/extremo.py` (o nome interno ficou "extremo"). Pro usuário, sempre chamar de **Tech**.
+
+O estilo 11 (YouTube dinâmico) é só pra gravação horizontal de fala e sai só no formato YT (1920x1080): subagente
+`editor-yt-dinamico`, skill `youtube-dinamico`, motor `work/yt/` + `remotion/src/yt-dinamico/`. Preparo dele:
+`--sem-corte --resolucao-original` (4K fica 4K). Os itens 1–10 servem pra qualquer vídeo (vertical ou 16:9).
 
 ## Pastas
 
 - `brutos/`: vídeos originais. **Nunca modificar nem sobrescrever.**
 - `work/<id>/`: preparo de cada vídeo (corte, transcrição, rosto). `work/basico/cfg/<id>.py`: config do básico.
 - `hyperframes/<id>-<estilo>/`: projetos HyperFrames (Hyperframe, VOX, Tech, Edição animada).
-- `remotion/`: Paper (`src/paper/videos/<id>.tsx`) e Animação viral (`src/animada3d/<id>/`).
+- `remotion/`: Paper (`src/paper/videos/<id>.tsx`), Animação viral (`src/animada3d/<id>/`) e os grafismos do YouTube
+  dinâmico (`src/yt-dinamico/`, dados de cada vídeo em `public-yt/<id>/`). `work/yt/cfg/<id>.py`: cfg do YouTube dinâmico.
 - `saidas/`: renders, **sempre com versão no nome** (`demo-extremo-v2.mp4`). Nunca sobrescrever versão anterior.
 - `trilhas/`: músicas e efeitos que o usuário tiver licença pra usar.
 - `referencias/<id>/`: material de referência e da internet de cada vídeo, com `fontes.md`.
@@ -65,14 +71,19 @@ O estilo 8 (Tech) é feito pelo subagente `editor-extremo`, com a skill `editor-
   objeto). A animada (2 linhas montando palavra por palavra) só quando escolhida no menu.
 - **Zona segura**: título, legenda e qualquer texto só na altura do peito — nunca lá em cima (o Instagram tampa), nunca
   baixo demais, nunca na altura do rosto. No RL, acima de 65 % da altura. Texto e enfeites a ≥ 90–100 px das laterais.
+- **Nunca faixa escura** (tarja, gradiente, sombra larga) atrás de título ou legenda — o usuário achou "ridícula". Em
+  fundo claro ou carregado (papel, telão, tela de celular filmada), o reforço é só na letra: contorno fino + sombra forte
+  (`leg_fundo_claro=True` no cfg do básico faz sozinho) ou reenquadrar.
 - **Corte, troca de modo e zoom só no início ou no fim de frase**, nunca no meio.
 - **Movimento**: a imagem nunca fica mais de 4 s parada (zoom leve, corte, troca de modo).
 - **3 modos alternando** nos estilos com animação (pessoa em tela cheia / animação em tela cheia / tela dividida), e a
-  **pessoa aparece em todo formato** (RL, IN, GL, YT) numa frase inteira a cada ~10 s. Nada de pessoa num quadrinho ou
-  cartão: na dividida ela ocupa a faixa inteira.
+  **pessoa aparece em todo formato** (RL, IN, GL, YT) numa frase inteira a cada ~10 s (frase de 2 s ou mais; lampejo de
+  1 s não conta — contar as aparições por formato antes de entregar). Nada de pessoa num quadrinho ou cartão: na
+  dividida ela ocupa a faixa inteira.
 - **A cor da pessoa nunca muda**: nenhum filtro, grade, LUT ou saturação nela. Remotion sempre com
   `--color-space=bt709`; HyperFrames com a conversão de `hyperframes/cor_pessoa.py` (os scripts já fazem). Conferir um
-  quadro do MP4 final contra o BRUTO.
+  quadro do MP4 final contra o BRUTO (não contra o tratado), diferença média < ~2–3 níveis. Só mexer na cor se o
+  usuário pedir, naquele vídeo, mostrando antes a comparação (gravação × proposta).
 - **Básico em tela cheia sempre**: nunca letterbox, faixa desfocada ou área borrada, em nenhum formato.
 - **Anúncio**: nada de QR Code, URL na tela, "link na bio" ou "me chama no Direct". A palavra "link" falada ("clica no
   link aqui embaixo") pode.
@@ -82,6 +93,9 @@ O estilo 8 (Tech) é feito pelo subagente `editor-extremo`, com a skill `editor-
 - **RL primeiro pra aprovação**; IN, GL e YT só depois do OK do RL.
 - **Um render por vez no computador** (fila `work/pipeline/fila_render.sh`). Montagem e revisão podem rodar junto.
 - **Nunca apagar nada de vez**: tudo vai pra Lixeira (`sistema.lixeira()`, send2trash).
+- **Sem duplicado**: o que vale é a pasta de entrega (PARA REVISAR / APROVADOS). Depois de entregue, o render em
+  `saidas/` e os intermediários pesados (base.mov, cópias em `hyperframes/`/`remotion/public*`) vão pra Lixeira; se
+  precisar de novo, gera de novo. Antes de limpar muita coisa, avisar que a Lixeira tem limite de tamanho.
 - **Versão nova nunca sobrescreve**: `-v2`, `-v3`… Pediu alteração = a versão antiga sai de PARA REVISAR na hora.
 - Fonte fina: nunca peso 100 (sai falhada no celular); Light 300 no mínimo, conferido no MP4.
 - Se alguma regra daqui atrapalhar um pedido explícito do usuário, perguntar antes de quebrar.

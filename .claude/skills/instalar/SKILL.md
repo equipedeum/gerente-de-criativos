@@ -52,6 +52,9 @@ npx -y hyperframes@0.8.76 doctor                   # baixa o HyperFrames; mostra
 Perguntar e gravar em `projeto.json`: `nome_pessoa` (quem aparece nos vídeos; vai na transcrição e nos textos),
 `marca` (empresa/produto, se houver), `termos_transcricao` (nomes e palavras que o whisper costuma errar). `pasta_entrega`
 (padrão `~/Desktop/CRIATIVOS/PARA REVISAR`) e `prefixo_codigo` (padrão `CR` → `#CR01`) só se o usuário quiser mudar.
+Marca (opcional; usado no Paper e no YouTube dinâmico): `cor_destaque` (cor principal da marca, padrão verde `#059669`),
+`cor_papel` e `cor_tinta` (fundo claro e texto dos painéis), `logo` e `logo_simbolo` (caminho de um SVG/PNG) e
+`slogan` (frase do cartão final). Vazio = padrão.
 
 ## 6. Teste de ponta a ponta
 ```bash

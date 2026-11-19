@@ -23,11 +23,11 @@ Padrões aprovados de todos os estilos, resumidos numa página: `work/pipeline/P
 | # | Quem | O quê |
 |---|---|---|
 | 0 | eu | Vídeo chegou → copiar pra `brutos/` se veio de fora (nunca mexer no original) → **mandar o menu** (CLAUDE.md) e esperar os números |
-| 1 | eu (ou `preparador`) | `./py work/pipeline/preparar.py <id> brutos/<arquivo>` (`--sem-corte` se já veio editado; `--mao` se é selfie na mão). Se imprimir "BURACO COM VOZ" → `preparador` retranscreve o trecho |
+| 1 | eu (ou `preparador`) | `./py work/pipeline/preparar.py <id> brutos/<arquivo>` (`--sem-corte` se já veio editado; `--mao` se é selfie na mão; YouTube dinâmico (11): `--sem-corte --resolucao-original` num id próprio, ex.: `<id>yt`). Se imprimir "BURACO COM VOZ" → `preparador` retranscreve o trecho |
 | 2 | `titulista` | só nos itens 2 e 4 (título): 15 opções, 3 melhores, recomenda 1 em 2 linhas. Eu escolho (ou mostro as 3 ao usuário se ele quiser escolher) |
 | 3 | eu | `./py work/pipeline/fila.py novo <id> <estilo> "<título>"` pra cada estilo escolhido → um código `#CRnn` por versão |
-| 4 | editores (MONTAR, em paralelo) | `editor-basico` (1–4), `editor-hyperframe` (5), `editor-paper` (6), `editor-vox` (7), `editor-extremo` (8), `editor-animada` (9), `editor-animacao-viral` (10). Montam e revisam por folhas, **sem render** |
-| 5 | `revisor-legenda` | texto + forma da legenda (básico, Paper, Extremo, Animada, Viral). Revisa E corrige |
+| 4 | editores (MONTAR, em paralelo) | `editor-basico` (1–4), `editor-hyperframe` (5), `editor-paper` (6), `editor-vox` (7), `editor-extremo` (8), `editor-animada` (9), `editor-animacao-viral` (10), `editor-yt-dinamico` (11). Montam e revisam por folhas, **sem render** |
+| 5 | `revisor-legenda` | texto + forma da legenda (básico, Paper, Extremo, Animada, Viral). Revisa E corrige. Vídeo difícil (muito nome próprio, número, termo técnico): duas passadas separadas, `revisor-legenda-texto` e depois `revisor-legenda-forma`. No YouTube dinâmico (sem legenda) ele revisa o texto dos painéis/capítulos do cfg |
 | 6 | fila de render | eu ponho o comando do RL em `work/pipeline/fila_render.txt` e rodo `bash work/pipeline/fila_render.sh` em segundo plano (se já não estiver rodando). **Um render por vez** |
 | 7 | eu (ou `revisor-visual`) | conferir o RL por quadros (`./py work/pipeline/folha_formatos.py <png> <RL.mp4> --t …` e abrir a imagem). Problema → editor CORRIGIR do afetado e render de novo (versão nova) |
 | 8 | `entregador` (ou eu) | `./py work/pipeline/entregar.py "#CRnn" <dur> RL=<mp4>` → `PARA REVISAR/#CRnn/` e aviso o usuário (uma linha por código) |
@@ -38,6 +38,8 @@ Padrões aprovados de todos os estilos, resumidos numa página: `work/pipeline/P
   REVISAR pra Lixeira) → editor CORRIGIR com as palavras do usuário → render (versão nova, nunca sobrescrever) →
   conferir → entregar. OK condicionado ("só ajusta X, o resto tá ok"): corrigir, conferir só o X e seguir sem perguntar.
 - **Descarte** ("#CRnn descarta"): `fila.py descartar "#CRnn"` (pasta pra Lixeira).
+- **YouTube dinâmico (11)**: sai só o YT; o render é `bash work/yt/render.sh <id> vN` (na fila, um por vez) e a entrega
+  é `entregar.py "#CRnn" <dur> YT=<mp4>`. O OK dele já aprova (não tem outros formatos).
 - Alteração vai no TOPO da `fila_render.txt`; vídeo novo no fim. Terminou algo, segue a fila.
 - Entre um vídeo e outro, atender primeiro os OKs e ajustes pendentes.
 - Lista do que revisar: `./py work/pipeline/lista_revisar.py` (gera `PARA REVISAR/_LISTA.md`).
