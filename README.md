@@ -1,28 +1,36 @@
 # Gerente de Criativos
 
-Um editor de vídeos curtos (Reels, Shorts, TikTok, anúncios) que roda dentro do [Claude Code](https://claude.com/claude-code).
-Você conversa com **um** assistente — o Gerente de Criativos — e ele distribui o trabalho pra uma equipe de subagentes:
-preparador, titulista, um editor por estilo, revisores de legenda e de imagem e o entregador.
+![Prévia dos estilos do Gerente de Criativos](docs/previa.png)
 
-## Instalar (Mac ou Windows)
+Editor de vídeos (Reels, Shorts, TikTok, anúncios e vídeo de YouTube) que roda dentro do
+[Claude Code](https://claude.com/claude-code). Você conversa com **um** assistente — o Gerente de Criativos — e ele
+distribui o trabalho pra uma equipe de 15 subagentes: preparador, titulista, um editor por estilo, revisores de legenda e
+de imagem e o entregador.
 
-Antes: ter o app do Claude com o Claude Code.
+## Instalar: cole o link e peça pra instalar
 
-1. Abra o Claude Code (aba de código do app) em qualquer pasta.
-2. Cole o link deste repositório e peça: **"clona esse repositório na minha pasta pessoal e instala o gerente de criativos"**.
-3. No fim, abra uma conversa nova do Claude Code na pasta `gerente-de-criativos` (na sua pasta pessoal) e fale com o
-   Gerente.
+1. Abra o **Claude Code** (a aba de código do app do Claude, ou `claude` no terminal) em qualquer pasta.
+2. Cole esta mensagem:
 
-Quem já usa o `npx` pode instalar a skill direto:
+   ```
+   https://github.com/rafaelextremo/gerente-de-criativos
+   Clona esse repositório na minha pasta pessoal e instala o gerente de criativos.
+   ```
+
+3. Responda às perguntas dele. O Claude baixa o projeto pra `~/gerente-de-criativos`, confere o que falta no computador e
+   **pede o seu OK antes de instalar cada programa** (Homebrew, Python 3.12, ffmpeg, Node.js, Git) e antes dos downloads
+   grandes (modelo de transcrição ~480 MB, pacotes do Remotion ~300 MB). Se o instalador pedir a senha do computador,
+   quem digita é você. No fim ele faz um vídeo de teste de poucos segundos.
+4. Abra uma **conversa nova** do Claude Code na pasta `gerente-de-criativos` (na sua pasta pessoal) e fale com o Gerente.
+   Na primeira conversa ele pergunta o nome de quem aparece nos vídeos e a marca.
+
+Funciona no Mac e no Windows. Tudo roda no seu computador (nada de vídeo vai pra nuvem). Se algo falhar no meio, peça:
+**"confere a instalação e me diz o que está faltando"**.
+
+Quem já usa o `npx` pode instalar só a skill instaladora e depois pedir **"instala o gerente de criativos"**:
 ```bash
 npx skills add rafaelextremo/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
 ```
-e depois pedir **"instala o gerente de criativos"**.
-
-O Claude baixa o projeto, confere o que falta no computador e pede o seu OK antes de instalar cada programa (Homebrew,
-Python 3.12, ffmpeg, Node.js, Git) e antes dos downloads grandes (modelo de transcrição ~480 MB, pacotes ~300 MB). Se o
-instalador pedir a senha do computador, quem digita é você. No fim ele faz um vídeo de teste de poucos segundos. Tudo
-roda no seu computador. Se algo falhar no meio, peça: **"confere a instalação e me diz o que está faltando"**.
 
 ## Usar
 
@@ -39,6 +47,7 @@ Mande o vídeo (arraste o arquivo pra conversa ou diga o caminho) e peça pra ed
 8) Tech (motion design de interface, escuro e laranja)
 9) Edição animada (documentário ilustrado em tela cheia)
 10) Animação viral (desenho 3D de bonequinho)
+11) YouTube dinâmico (vídeo de canal 16:9: limpeza de tropeço, plano aberto/fechado, painel de texto, capítulos)
 ```
 
 Responda com os números. Cada versão ganha um código (`#CR01`, `#CR02`…) e aparece primeiro só no formato vertical
@@ -48,18 +57,23 @@ Responda com os números. Cada versão ganha um código (`#CR01`, `#CR02`…) e 
 - `#CR01: <o que mudar>` → ele corrige e entrega uma versão nova;
 - `#CR01 descarta` → vai pra Lixeira.
 
+O **YouTube dinâmico** (11) é pra gravação horizontal de fala (4K de preferência) e sai direto no formato do YouTube
+(1920x1080); o primeiro ok já aprova. As cores, fontes e o logo dele vêm do `projeto.json` (`cor_destaque`, `cor_papel`,
+`cor_tinta`, `logo`, `slogan`…).
+
 ## O que tem aqui
 
 | pasta | |
 |---|---|
 | `CLAUDE.md` | quem é o Gerente e as regras de edição |
-| `.claude/agents/` | os subagentes |
+| `.claude/agents/` | os 15 subagentes |
 | `skills/gerente-de-criativos/` | a skill instaladora (a que o `npx skills add` instala) |
 | `.claude/skills/` | o processo de cada estilo, a instalação e as skills do HyperFrames |
-| `work/` | preparo, versão básica e fila (`work/pipeline/`) |
+| `work/` | preparo, versão básica, YouTube dinâmico (`work/yt/`) e fila (`work/pipeline/`) |
 | `hyperframes/` | motores dos estilos em HyperFrames (Hyperframe, VOX, Tech, Edição animada) e moldes em `exemplos/` |
-| `remotion/` | Paper e Animação viral (Remotion) |
+| `remotion/` | Paper, Animação viral e os grafismos do YouTube dinâmico (Remotion) |
 | `ferramentas/` | fontes livres (OFL) e ícones Phosphor (MIT) |
 | `brutos/`, `saidas/`, `trilhas/`, `referencias/` | seus vídeos e entregas (ficam só no seu computador) |
+| `docs/` | imagens deste README |
 
 Material de terceiros e licenças: `TERCEIROS.md`.

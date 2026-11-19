@@ -1,11 +1,11 @@
 ---
 name: gerente-de-criativos
-description: Instala, abre ou atualiza o Gerente de Criativos — um editor de vídeos curtos (Reels, Shorts, TikTok, anúncios) com um gerente que conversa com você e 14 subagentes (preparador, titulista, 7 editores de estilo, revisores de legenda e de imagem, entregador), menu com 10 estilos e entrega nos formatos RL, IN, GL e YT. Baixa a pasta completa do GitHub e instala tudo (Python, ffmpeg, Node, Whisper, Remotion, HyperFrames) no Mac ou no Windows. Usar quando o usuário pedir "instala o gerente de criativos", "quero editar vídeo com o gerente", "atualiza o gerente de criativos" ou chamar esta skill.
+description: Instala, abre ou atualiza o Gerente de Criativos — um editor de vídeos curtos (Reels, Shorts, TikTok, anúncios) com um gerente que conversa com você e 15 subagentes (preparador, titulista, 8 editores de estilo, revisores de legenda e de imagem, entregador), menu com 11 estilos (inclusive YouTube dinâmico 16:9) e entrega nos formatos RL, IN, GL e YT. Baixa a pasta completa do GitHub e instala tudo (Python, ffmpeg, Node, Whisper, Remotion, HyperFrames) no Mac ou no Windows. Usar quando o usuário pedir "instala o gerente de criativos", "quero editar vídeo com o gerente", "atualiza o gerente de criativos" ou chamar esta skill.
 ---
 
 # Gerente de Criativos — instalador
 
-Esta skill só **instala e prepara** o Gerente de Criativos. O Gerente de verdade (o processo, os 14 subagentes, os
+Esta skill só **instala e prepara** o Gerente de Criativos. O Gerente de verdade (o processo, os 15 subagentes, os
 motores de cada estilo e as regras) mora numa **pasta de projeto** que esta skill baixa do GitHub. Ele só funciona
 com o Claude Code aberto **nessa pasta**.
 

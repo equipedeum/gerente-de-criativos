@@ -124,6 +124,19 @@ def conferir():
         ok('emoji do título', 'Segoe UI Emoji do Windows')
     else:
         print('  [aviso] emoji do título: sem fonte de emoji colorida — título sai sem emoji')
+    # equipe: os 15 subagentes e as skills de cada estilo do menu (vêm no repositório; faltar = clone incompleto)
+    agentes = ['preparador', 'titulista', 'editor-basico', 'editor-hyperframe', 'editor-paper', 'editor-vox', 'editor-extremo',
+               'editor-animada', 'editor-animacao-viral', 'editor-yt-dinamico', 'revisor-legenda', 'revisor-legenda-texto',
+               'revisor-legenda-forma', 'revisor-visual', 'entregador']
+    skills = ['processo-do-gerente', 'instalar', 'editor-basico', 'video-dividido-hyperframes', 'editor-paper', 'editor-vox',
+              'editor-extremo', 'edicao-animada', 'animacao-viral', 'youtube-dinamico', 'revisar-legenda-texto',
+              'revisar-legenda-forma', 'shorts', 'hyperframes']
+    sem_a = [a for a in agentes if not (RAIZ / f'.claude/agents/{a}.md').exists()]
+    sem_s = [s for s in skills if not (RAIZ / f'.claude/skills/{s}/SKILL.md').exists()]
+    if sem_a or sem_s:
+        falta('equipe', 'faltando: ' + ', '.join([f'agente {a}' for a in sem_a] + [f'skill {s}' for s in sem_s]), 'git pull (ou clonar de novo)')
+    else:
+        ok('equipe', f'{len(agentes)} subagentes e {len(skills)} skills')
     pj = json.loads((RAIZ / 'projeto.json').read_text(encoding='utf-8'))
     if not pj.get('nome_pessoa'):
         print('  [aviso] projeto.json: nome_pessoa vazio (perguntar ao usuário quem aparece nos vídeos)')
