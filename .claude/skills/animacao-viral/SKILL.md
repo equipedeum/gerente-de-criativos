@@ -35,8 +35,11 @@ Motor em `remotion/src/animada3d/motor/` (adaptado da skill `mromidev/claude-ani
      - fonte vertical (`work/<id>/base.mov`): `./py remotion/scripts/pessoa_dividido_animada3d.py <id> remotion/public-animada3d/<id>-pessoa-dividido.mp4 --alt 1100 --rosto 0.50`
        (largura inteira, janela seguindo o rosto, só crop + scale, tags bt709); a cheia =
        `ffmpeg -i work/<id>/base.mov -an -vf scale=1080:1920:flags=lanczos -c:v libx264 -crf 17 -pix_fmt yuv420p -colorspace bt709 -color_primaries bt709 -color_trc bt709 -color_range tv remotion/public-animada3d/<id>-pessoa-cheio.mp4`;
-     - fonte 16:9 (`base_h.mov`): `./py remotion/scripts/pessoa_formatos_animada3d.py <id>` (gera também os recortes dos
-       formatos IN/GL/YT);
+     - fonte 16:9 (`base_h.mov`): o RL sai de janelas fixas centradas no rosto (`cx` = mediana do `cx` do
+       `face_track.json`; a pessoa sentada quase não sai do lugar): cheia = `-vf "crop=608:1080:<cx-304>:0,scale=1080:1920:flags=lanczos"`,
+       dividida com divY 820 = `-vf "crop=1060:1080:<cx-530>:0,scale=1080:1100:flags=lanczos"` (divY 960:
+       `crop=1215:1080:<cx-607>:0,scale=1080:960`), mesmas opções de cor/encode da linha de cima (sem filtro, tags bt709).
+       Os formatos IN/GL/YT: `./py remotion/scripts/pessoa_formatos_animada3d.py <id>`;
    - `sfx/` e `fontes/` (copiar `remotion/public/sfx-animada/*.wav` pra `public-animada3d/sfx/`; a fonte já está lá).
    Conferir num quadro de 3 momentos que a cabeça não é cortada.
 2. **Roteiro** `remotion/src/animada3d/<id>/roteiro.md`: tabela de MODOS, depois uma linha por frase com o que acontece

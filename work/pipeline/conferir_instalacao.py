@@ -19,6 +19,11 @@ from pathlib import Path
 RAIZ = Path(__file__).resolve().parents[2]
 MAC, WIN = sys.platform == 'darwin', os.name == 'nt'
 FALTA = []
+for _s in (sys.stdout, sys.stderr):   # Python do sistema no Windows (antes do venv) imprimia os acentos quebrados
+    try:
+        _s.reconfigure(encoding='utf-8')
+    except (AttributeError, ValueError):
+        pass
 
 
 def ok(item, txt):
