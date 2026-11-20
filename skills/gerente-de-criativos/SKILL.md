@@ -29,7 +29,7 @@ espaço). Se o usuário preferir outro lugar, usar o que ele disser, desde que n
    - Windows sem git: `winget install Git.Git` e abrir um terminal novo.
 2. Clonar:
    ```bash
-   git clone https://github.com/rafaelextremo/gerente-de-criativos.git ~/gerente-de-criativos
+   git clone https://github.com/equipedeum/gerente-de-criativos.git ~/gerente-de-criativos
    ```
 3. Se der erro de rede ou de acesso: conferir a internet e tentar de novo. O repositório é público, não precisa de
    login no GitHub.

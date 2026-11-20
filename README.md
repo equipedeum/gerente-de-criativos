@@ -13,7 +13,7 @@ de imagem e o entregador.
 2. Cole esta mensagem:
 
    ```
-   https://github.com/rafaelextremo/gerente-de-criativos
+   https://github.com/equipedeum/gerente-de-criativos
    Clona esse repositório na minha pasta pessoal e instala o gerente de criativos.
    ```
 
@@ -29,7 +29,7 @@ Funciona no Mac e no Windows. Tudo roda no seu computador (nada de vídeo vai pr
 
 Quem já usa o `npx` pode instalar só a skill instaladora e depois pedir **"instala o gerente de criativos"**:
 ```bash
-npx skills add rafaelextremo/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
+npx skills add equipedeum/gerente-de-criativos --skill gerente-de-criativos -a claude-code -g
 ```
 
 ## Usar
